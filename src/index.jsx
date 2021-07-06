@@ -1,9 +1,3 @@
-import React from 'react';
+import Module from './mod.vue';
 
-export default function Component() {
-  return (
-    <div>
-      Hello React!
-    </div>
-  )
-}
+export default Module;

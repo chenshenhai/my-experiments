@@ -1,8 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+
+import Vue from 'vue';
 import HelloWorld from './../../dist/index.es.js';
 
-ReactDOM.render(
-  React.createElement(HelloWorld, {}, null),
-  document.querySelector('#app'),
-)
+const app = Vue.createApp({
+  template: `
+    <div>
+      <hello-world></hello-world>
+    </div>
+  `
+});
+app.component('hello-world', HelloWorld);
+app.mount('#app')

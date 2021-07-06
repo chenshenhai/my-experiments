@@ -1,9 +1,12 @@
 const path = require('path');
 const { babel } = require('@rollup/plugin-babel');
+const vue = require('rollup-plugin-vue');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const externalGlobals = require('rollup-plugin-external-globals');
+const postcss = require('rollup-plugin-postcss');
 const alias = require('@rollup/plugin-alias');
+const typescript = require('rollup-plugin-typescript2');
 
 const resolveFile = function(filePath) {
   return path.join(__dirname, '..', filePath)
@@ -12,7 +15,6 @@ const resolveFile = function(filePath) {
 const babelOptions = {
   "presets": [
     '@babel/preset-env',
-    '@babel/preset-react'
   ]
 }
 
@@ -25,39 +27,47 @@ module.exports = [
       format: 'iife',
     }, 
     plugins: [
+      vue(),
+      postcss({
+        plugins: []
+      }),
       nodeResolve(),
       commonjs(),
       babel(babelOptions),
       externalGlobals({
-        'react': 'React',
-        'react-dom': 'ReactDOM',
-      })
-    ],
-    external: ['react', 'react-dom'],
-  },
-  {
-    input: resolveFile('src/index.jsx'),
-    output: {
-      name: 'HelloWorld',
-      file: resolveFile('dist/index.es.js'),
-      format: 'es',
-    }, 
-    plugins: [
-      nodeResolve(),
-      commonjs(),
-      babel(babelOptions),
-      alias({
-        entries: [
-          { find: 'react', replacement: 'https://dev.jspm.io/react' },
-          { find: 'react-dom', replacement: 'https://dev.jspm.io/react-dom' }
-        ]
+        'vue': 'Vue'
       }),
     ],
-    external: [
-      // 'https://dev.jspm.io/react',
-      // 'https://dev.jspm.io/react-dom',
-      'react-dom',
-      'react',
-    ],
+    external: ['vue'],
   },
+  // {
+  //   input: resolveFile('src/index.tsx'),
+  //   output: {
+  //     name: 'HelloWorld',
+  //     file: resolveFile('dist/index.es.js'),
+  //     format: 'es',
+  //   }, 
+  //   plugins: [
+      
+  //     vue(),
+  //     postcss({
+  //       plugins: []
+  //     }),
+  //     nodeResolve(),
+  //     commonjs(),
+  //     // babel(babelOptions),
+  //     typescript({
+  //       compilerOptions: { declaration: true },
+  //       exclude: ["tests/**/*.ts", "tests/**/*.tsx"]
+  //     }),
+  //     alias({
+  //       entries: [
+  //         { find: 'vue', replacement: 'https://dev.jspm.io/vue@3' },
+  //       ]
+  //     }),
+  //   ],
+  //   external: [
+  //     'vue',
+  //   ],
+  // },
 ]
