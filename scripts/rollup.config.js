@@ -78,4 +78,23 @@ module.exports = [
       'react',
     ],
   },
+  {
+    input: resolveFile('src/index.jsx'),
+    output: {
+      file: resolveFile('dist/index.cjs.js'),
+      format: 'cjs',
+      exports: 'default'
+    }, 
+    plugins: [
+      postcss({
+        plugins: [],
+        extract: true,
+        extract: resolveFile('dist/index.css'),
+      }),
+      nodeResolve(),
+      commonjs(),
+      babel(babelOptions),
+    ],
+    external: ['react', 'react-dom'],
+  },
 ]
