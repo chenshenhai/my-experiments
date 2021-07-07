@@ -6,7 +6,7 @@ import HelloWorld from './../../dist/index.es.js';
 const root = defineComponent({
   render() {
     return h('div', {}, [
-      h(HelloWorld, {}, null)
+      h(HelloWorld, { text: 'MyVue' }, null)
     ])
   }
 });

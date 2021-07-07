@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    Hello Vue!
+    Hello {{displayText}}!
   </div>
 </template>
 
@@ -8,9 +8,15 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  setup() {
-    
+  setup() {},
+  props: {
+    text: String,
   },
+  data() {
+    return {
+      displayText: this.text || 'Vue'
+    }
+  }
 })
 </script>
 

@@ -82,7 +82,9 @@ module.exports = [
     plugins: [
       vue(),
       postcss({
-        plugins: []
+        plugins: [],
+        extract: true,
+        extract: resolveFile('dist/index.css'),
       }),
       nodeResolve(),
       commonjs(),
