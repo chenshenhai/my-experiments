@@ -42,6 +42,24 @@ module.exports = [
   {
     input: resolveFile('src/index.js'),
     output: {
+      name: 'HelloWorld',
+      file: resolveFile('dist/index.amd.js'),
+      format: 'amd',
+    }, 
+    plugins: [
+      vue(),
+      postcss({
+        plugins: []
+      }),
+      nodeResolve(),
+      commonjs(),
+      babel(babelOptions),
+    ],
+    external: ['vue'],
+  },
+  {
+    input: resolveFile('src/index.js'),
+    output: {
       file: resolveFile('dist/index.es.js'),
       format: 'es',
     }, 

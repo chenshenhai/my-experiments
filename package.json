@@ -14,6 +14,7 @@
     "@vue/babel-plugin-jsx": "^1.0.6",
     "@vue/compiler-sfc": "^3.1.4",
     "@vue/server-renderer": "^3.1.4",
+    "requirejs": "^2.3.6",
     "rollup": "^2.52.7",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-external-globals": "^0.6.1",
