@@ -1,13 +1,16 @@
 
-import Vue from 'vue';
+import { createApp, defineComponent, h } from './../../dist/vue.es.js';
 import HelloWorld from './../../dist/index.es.js';
 
-const app = Vue.createApp({
-  template: `
-    <div>
-      <hello-world></hello-world>
-    </div>
-  `
+
+const root = defineComponent({
+  render() {
+    return h('div', {}, [
+      h(HelloWorld, {}, null)
+    ])
+  }
 });
+
+const app = createApp(root);
 app.component('hello-world', HelloWorld);
 app.mount('#app')
