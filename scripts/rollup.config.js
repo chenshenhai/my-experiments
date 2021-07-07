@@ -3,7 +3,7 @@ const { babel } = require('@rollup/plugin-babel');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const externalGlobals = require('rollup-plugin-external-globals');
-const alias = require('@rollup/plugin-alias');
+const postcss = require('rollup-plugin-postcss');
 
 const resolveFile = function(filePath) {
   return path.join(__dirname, '..', filePath)
@@ -25,6 +25,9 @@ module.exports = [
       format: 'iife',
     }, 
     plugins: [
+      postcss({
+        plugins: []
+      }),
       nodeResolve(),
       commonjs(),
       babel(babelOptions),
@@ -43,19 +46,34 @@ module.exports = [
       format: 'es',
     }, 
     plugins: [
+      postcss({
+        plugins: []
+      }),
       nodeResolve(),
       commonjs(),
       babel(babelOptions),
-      alias({
-        entries: [
-          { find: 'react', replacement: 'https://dev.jspm.io/react' },
-          { find: 'react-dom', replacement: 'https://dev.jspm.io/react-dom' }
-        ]
-      }),
     ],
     external: [
-      // 'https://dev.jspm.io/react',
-      // 'https://dev.jspm.io/react-dom',
+      'react-dom',
+      'react',
+    ],
+  },
+  {
+    input: resolveFile('src/index.jsx'),
+    output: {
+      name: 'HelloWorld',
+      file: resolveFile('dist/index.amd.js'),
+      format: 'amd',
+    }, 
+    plugins: [
+      postcss({
+        plugins: []
+      }),
+      nodeResolve(),
+      commonjs(),
+      babel(babelOptions),
+    ],
+    external: [
       'react-dom',
       'react',
     ],

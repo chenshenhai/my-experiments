@@ -1,9 +1,11 @@
 import React from 'react';
+import './index.css';
 
-export default function Component() {
+export default function Component(props = {}) {
+  const { text = 'React' } = props;
   return (
-    <div>
-      Hello React!
+    <div className="box">
+      Hello {text}!
     </div>
   )
 }
