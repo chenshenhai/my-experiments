@@ -14,7 +14,8 @@ const resolveFile = function(filePath) {
 const babelOptions = {
   "presets": [
     '@babel/preset-env',
-  ]
+  ],
+  'babelHelpers': 'bundled'
 }
 
 module.exports = [
