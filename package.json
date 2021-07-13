@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "w": "node ./src/write.js",
+    "es": "node ./src/es.js",
+    "r": "node ./src/read.js"
+  },
+  "devDependencies": {
+    "event-stream": "^4.0.1"
+  }
+}
