@@ -1,12 +1,9 @@
 {
   "scripts": {
-    "w": "node ./src/write.js",
-    "es": "node ./src/es.js",
-    "es2": "node ./src/es2.js",
-    "es3": "node ./src/es3.js",
-    "r": "node ./src/read.js"
+    "db": "node ./src/create-db.js",
+    "tb": "node ./src/create-tb.js"
   },
-  "devDependencies": {
-    "event-stream": "^4.0.1"
+  "dependencies": {
+    "mysql": "^2.18.1"
   }
 }
