@@ -1,4 +1,5 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ENV = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 const fileResolve = function (file) {
@@ -30,13 +31,33 @@ module.exports = {
             'plugins': []
           }
         }
+      },
+      {
+        test: /\.(css|less)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          // {
+          //   loader: 'postcss-loader',
+          //   options: {
+          //     plugins: () => {
+          //       return [];
+          //     }
+          //   }
+          // },
+          'less-loader'
+        ]
       }
     ]
   },
   resolve: {
     extensions: ['.jsx', '.js' ],
   },
-  plugins: [],
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'dist/[name].css'
+    })
+  ],
 
   devServer: {
     contentBase: path.join(__dirname, '..'),
