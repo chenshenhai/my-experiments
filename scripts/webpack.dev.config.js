@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { VueLoaderPlugin } = require('vue-loader/dist/index')
 const ENV = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 const fileResolve = function (file) {
@@ -10,15 +11,16 @@ module.exports = {
   mode: ENV, 
   devtool: 'inline-cheap-module-source-map',  
   entry: {
-    'index' : fileResolve('src/index.jsx'),
+    'index' : fileResolve('src/index.js'),
   },
  
   output: {
     path: fileResolve(''),
     filename: 'dist/[name].js',
   },
-  module: { 
-    rules: [ 
+
+  module: {
+    rules: [
       {
         test: /\.(js|jsx)$/,
         use: {
@@ -26,34 +28,35 @@ module.exports = {
           options: {
             presets: [
               '@babel/preset-env',
-              '@babel/preset-react'
             ],
             'plugins': []
           }
         }
       },
       {
+        test: /\.vue$/,
+        use: [
+          'vue-loader'
+        ]
+      },
+      {
         test: /\.(css|less)$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          // MiniCssExtractPlugin.loader,
+          'style-loader',
           'css-loader',
-          // {
-          //   loader: 'postcss-loader',
-          //   options: {
-          //     plugins: () => {
-          //       return [];
-          //     }
-          //   }
-          // },
-          'less-loader'
+          "less-loader",
         ]
-      }
+      },
     ]
   },
+
   resolve: {
-    extensions: ['.jsx', '.js' ],
+    extensions: ['.jsx', '.js', '.vue' ],
   },
+
   plugins: [
+    new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: 'dist/[name].css'
     })
