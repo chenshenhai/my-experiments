@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "db": "node ./src/create-db.js",
-    "tb": "node ./src/create-tb.js"
+    "db": "node ./src/database.js",
+    "tb": "node ./src/table.js"
   },
   "dependencies": {
     "mysql": "^2.18.1"
