@@ -1,3 +1,4 @@
+const moment = require('moment');
 const { doConnect } = require('./util');
 
 main();
@@ -5,6 +6,7 @@ main();
 async function main() {
   await insertData();
   await insertList();
+  await queryLastHourData();
 }
 
 
@@ -39,3 +41,18 @@ async function insertList() {
     console.log('insert table fail!');
   }
 }
+
+async function queryLastHourData() {
+  const end = Date.now();
+  const start = end - (1000 * 60);
+  const startTime =  moment(new Date(start)).format('YYYY-MM-DD HH:mm:ss');
+  const endTime = moment(new Date(end)).format('YYYY-MM-DD HH:mm:ss');
+  console.log('startTime =', startTime);
+  const sql = `
+    SELECT * FROM \`user_info\` 
+    WHERE  TIMESTAMP(create_time) BETWEEN ? AND ?  ORDER BY TIMESTAMP(create_time) DESC;
+  `;
+  const result = await doConnect(sql, [startTime, endTime]);
+  console.log('select results = ', result);
+}
+
