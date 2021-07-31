@@ -1,6 +1,4 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { VueLoaderPlugin } = require('vue-loader/dist/index')
 const ENV = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 const fileResolve = function (file) {
@@ -10,6 +8,7 @@ const fileResolve = function (file) {
 module.exports = {
   mode: ENV, 
   devtool: 'inline-cheap-module-source-map',  
+ 
   entry: {
     'index' : fileResolve('src/index.js'),
   },
@@ -32,33 +31,19 @@ module.exports = {
             'plugins': []
           }
         }
-      },
-      {
-        test: /\.vue$/,
-        use: [
-          'vue-loader'
-        ]
-      },
-      {
-        test: /\.(css|less)$/,
-        use: [
-          // MiniCssExtractPlugin.loader,
-          'style-loader',
-          'css-loader',
-          "less-loader",
-        ]
-      },
+      }
     ]
   },
   
   resolve: {
     extensions: ['.jsx', '.js', '.vue' ],
   },
+  plugins: [],
 
-  plugins: [
-    new VueLoaderPlugin(),
-    new MiniCssExtractPlugin({
-      filename: 'dist/[name].css'
-    })
-  ],
+  devServer: {
+    contentBase: path.join(__dirname, '..'),
+    port: 9000,
+    hot: false,
+    inline: false,
+  }
 }
