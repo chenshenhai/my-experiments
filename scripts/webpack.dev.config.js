@@ -10,7 +10,7 @@ module.exports = {
   mode: ENV,  
  
   entry: {
-    'index' : fileResolve('src/index.jsx'),
+    'index' : fileResolve('src/index.tsx'),
   },
  
   output: {
@@ -18,7 +18,31 @@ module.exports = {
     filename: 'dist/[name].js',
   },
   module: { 
-    rules: [ 
+    rules: [
+      {
+        test: /\.(ts|tsx)?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                '@babel/preset-env',
+                '@babel/preset-react'
+              ],
+              'plugins': []
+            }
+          },
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              appendTsSuffixTo: [],
+              happyPackMode: false,
+            },
+          },
+        ],
+        exclude: /node_modules/,
+      },
       {
         test: /\.(js|jsx)$/,
         use: {
