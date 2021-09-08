@@ -1,12 +1,12 @@
-const studio = require('./components');
+const mycomponent = require('./components');
 
 const req = require.context('./components/', true, /^\.\/locale\/.+_.+\.tsx$/);
 
-antd.locales = {};
+mycomponent.locales = {};
 
 req.keys().forEach(mod => {
   const matches = mod.match(/\/([^/]+).tsx$/);
-  antd.locales[matches[1]] = req(mod).default;
+  mycomponent.locales[matches[1]] = req(mod).default;
 });
 
 module.exports = studio;
