@@ -28,7 +28,7 @@ const babelConfig = {
     [
       'babel-plugin-import',
       {
-        libraryName: 'idrawStudio',
+        libraryName: 'mycomponent',
         libraryDirectory: '', // default: lib
         style: true,
       },

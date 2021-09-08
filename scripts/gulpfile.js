@@ -138,7 +138,7 @@ function babelify(js, modules) {
 function compile(modules) {
   rimraf.sync(modules !== false ? libDir : esDir);
   const less = gulp
-    .src(['src/**/*.less'])
+    .src(['components/**/*.less'])
     .pipe(
       through2.obj(function(file, encoding, next) {
         this.push(file.clone());
@@ -163,16 +163,16 @@ function compile(modules) {
     )
     .pipe(gulp.dest(modules === false ? esDir : libDir));
   const assets = gulp
-    .src(['src/**/*.@(png|svg)'])
+    .src(['components/**/*.@(png|svg)'])
     .pipe(gulp.dest(modules === false ? esDir : libDir));
   let error = 0;
   const source = [
-    'src/**/*.js',
-    'src/**/*.jsx',
-    'src/**/*.tsx',
-    'src/**/*.ts',
+    'components/**/*.js',
+    'components/**/*.jsx',
+    'components/**/*.tsx',
+    'components/**/*.ts',
     'typings/**/*.d.ts',
-    '!src/*/__tests__/*',
+    '!components/*/__tests__/*',
   ];
 
   const tsResult = gulp.src(source).pipe(

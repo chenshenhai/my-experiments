@@ -10,7 +10,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CleanUpStatsPlugin = require('./clean-up-stats-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const distFileBaseName = 'idraw-studio';
+const distFileBaseName = 'mycomponent';
 
 const svgRegex = /\.svg(\?v=\d+\.\d+\.\d+)?$/;
 const svgOptions = {
@@ -168,11 +168,11 @@ function getWebpackConfig(modules) {
       new CaseSensitivePathsPlugin(),
       new webpack.BannerPlugin(`
 ${pkg.name} v${pkg.version}
-Copyright 2021-present, idraw-studio.
+Copyright 2021-present, mycomponent.
 All rights reserved.
       `),
       new WebpackBar({
-        name: '🚚  @idraw/studio ...',
+        name: '🚚  mycomponent ...',
         color: '#2f54eb',
       }),
       new CleanUpStatsPlugin(),

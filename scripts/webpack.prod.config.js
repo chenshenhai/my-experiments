@@ -13,8 +13,8 @@ function ignoreMomentLocale(webpackConfig) {
 }
 
 function addLocales(webpackConfig) {
-  let packageName = 'idraw-studio-with-locales';
-  if (webpackConfig.entry['idraw-studio.min']) {
+  let packageName = 'mycomponent-with-locales';
+  if (webpackConfig.entry['mycomponent.min']) {
     packageName += '.min';
   }
   webpackConfig.entry[packageName] = './index-with-locales.js';
@@ -47,7 +47,7 @@ webpackDarkConfig.forEach(config => {
 
   // rename default entry to ${theme} entry
   Object.keys(config.entry).forEach(entryName => {
-    config.entry[entryName.replace('idraw-studio', `idraw-studio.dark`)] = config.entry[entryName];
+    config.entry[entryName.replace('mycomponent', `mycomponent.dark`)] = config.entry[entryName];
     delete config.entry[entryName];
   });
 
