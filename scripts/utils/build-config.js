@@ -29,7 +29,7 @@ function getWebpackConfig(modules) {
   const pluginImportOptions = {
     style: true,
     libraryName: distFileBaseName,
-    libraryDirectory: 'src',
+    libraryDirectory: 'components',
   };
   babelConfig.plugins.push([resolve('babel-plugin-import'), pluginImportOptions]);
 

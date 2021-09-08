@@ -199,63 +199,6 @@ function compile(modules) {
 }
 
 
-
-// function githubRelease(done) {
-//   const changlogFiles = [
-//     path.join(cwd, 'CHANGELOG.en-US.md'),
-//     path.join(cwd, 'CHANGELOG.zh-CN.md'),
-//   ];
-//   console.log('creating release on GitHub');
-//   if (!process.env.GITHUB_TOKEN) {
-//     console.log('no GitHub token found, skip');
-//     return;
-//   }
-//   if (!changlogFiles.every(file => fs.existsSync(file))) {
-//     console.log('no changelog found, skip');
-//     return;
-//   }
-//   const github = new Octokit({
-//     auth: process.env.GITHUB_TOKEN,
-//   });
-//   const date = new Date();
-//   const { version } = packageJson;
-//   const enChangelog = getChangelog(changlogFiles[0], version);
-//   const cnChangelog = getChangelog(changlogFiles[1], version);
-//   const changelog = [
-//     `\`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}\``,
-//     enChangelog,
-//     '\n',
-//     '---',
-//     '\n',
-//     cnChangelog,
-//   ].join('\n');
-//   const [_, owner, repo] = execSync('git remote get-url origin') // eslint-disable-line
-//     .toString()
-//     .match(/github.com[:/](.+)\/(.+)\.git/);
-//   github.repos
-//     .createRelease({
-//       owner,
-//       repo,
-//       tag_name: version,
-//       name: version,
-//       body: changelog,
-//     })
-//     .then(() => {
-//       done();
-//     })
-//     .catch(err => {
-//       console.log(err);
-//     });
-// }
-
-// gulp.task(
-//   'tag',
-//   gulp.series(done => {
-//     tag();
-//     githubRelease(done);
-//   }),
-// );
-
 gulp.task(
   'check-git',
   gulp.series(done => {
