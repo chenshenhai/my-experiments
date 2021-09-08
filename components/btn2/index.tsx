@@ -2,7 +2,7 @@ import { defineComponent, App } from 'vue';
 // import PageContent from './content';
 
 const Btn2 = defineComponent({
-  name: 'my-btn2',
+  name: 'btn2',
   props: {},
 
   data() {
@@ -10,8 +10,8 @@ const Btn2 = defineComponent({
   },
 
   render() {
-    return (<button className="my-btn2">
-      {this.$slots}
+    return (<button className="btn2">
+      {this.$slots?.default({})}
     </button>);
   },
 
@@ -26,4 +26,3 @@ Btn2.install = function(app: App) {
 };
 
 export default Btn2;
-
