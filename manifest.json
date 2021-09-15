@@ -28,5 +28,6 @@
   ],
   "web_accessible_resources": [
     "js/*"
-  ]
+  ],
+  "devtools_page": "page/devtools.html"
 }
