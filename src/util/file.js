@@ -3,7 +3,7 @@ const path = require('path');
 
 
 
-function readAllFilePath(dir) {
+function readAllFilesPath(dir) {
   const dirPath = path.resolve(dir);
   const baseDir = dirPath;
   const list = [];
@@ -27,6 +27,27 @@ function readAllFilePath(dir) {
   return list;
 }
 
-const list = readAllFilePath(path.join(__dirname, '..', '..'));
-console.log('list ===', list);
+function createFullDir(dir) {
+  if (fs.existsSync(dir)) {
+    return true;
+  } else {
+    if (createFullDir(path.dirname(dir))) {
+      fs.mkdirSync(dir);
+      return true;
+    }
+  }
+}
+
+function createFile(filePath, text) {
+  const fileDir = path.dirname(filePath);
+  createFullDir(fileDir);
+  fs.writeFileSync(filePath, text);
+}
+
+
+module.exports = {
+  readAllFilesPath,
+  createFullDir,
+  createFile,
+}
 

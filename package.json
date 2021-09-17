@@ -5,7 +5,7 @@
   "scripts": {
     "dev:v": "node ./bin/index.js --version",
     "dev:ask": "node ./bin/index.js ask",
-    "dev:init": "node ./bin/index.js init ./dist ./xxx"
+    "dev:init": "node ./bin/index.js init ./dist/example2"
   },
   "devDependencies": {
     "commander": "^8.2.0",
