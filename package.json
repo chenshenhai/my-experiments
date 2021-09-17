@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "bin": "./bin/mycli.js",
   "scripts": {
-    "dev:v": "node ./bin/index.js --version"
+    "dev:v": "node ./bin/index.js --version",
+    "dev:ask": "node ./bin/index.js ask"
   },
   "devDependencies": {
     "commander": "^8.2.0",
