@@ -4,7 +4,8 @@
   "bin": "./bin/mycli.js",
   "scripts": {
     "dev:v": "node ./bin/index.js --version",
-    "dev:ask": "node ./bin/index.js ask"
+    "dev:ask": "node ./bin/index.js ask",
+    "dev:init": "node ./bin/index.js init ./dist ./xxx"
   },
   "devDependencies": {
     "commander": "^8.2.0",
