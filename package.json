@@ -2,6 +2,9 @@
   "name": "mycli",
   "version": "0.0.1",
   "bin": "./bin/mycli.js",
+  "scripts": {
+    "dev:v": "node ./bin/index.js --version"
+  },
   "devDependencies": {
     "commander": "^8.2.0",
     "inquirer": "^8.1.5"
