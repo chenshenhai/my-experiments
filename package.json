@@ -1,3 +1,9 @@
 {
-  
+  "name": "mycli",
+  "version": "0.0.1",
+  "bin": "./bin/mycli.js",
+  "devDependencies": {
+    "commander": "^8.2.0",
+    "inquirer": "^8.1.5"
+  }
 }
