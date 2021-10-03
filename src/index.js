@@ -4,28 +4,28 @@ import {
   useState,
  } from './lib/react.js';
 
-function Count() {
+function Count(props) {
   const [count, setCount] = useState(0);
   
   const onClick = () => {
     setCount(count + 1);
   }
 
-  return createElement('div', {}, 
+  return createElement('div', props, 
     createElement('button', {
       onClick,
-      className: 'btn'
+      className: 'btn',
+      id: 'dom-btn'
     }, 'Add'),
-    createElement('span', null, 'Num: '),
-    createElement('span', null, count),
-    
+    createElement('span', { id: 'dom-span-text' }, 'Num: '),
+    createElement('span', { id: 'dom-span-num' }, count),
   )
 }
 
 
 
 function App(props) {
-  return createElement(Count, null);
+  return createElement(Count, { id: 'dom-app' });
 }
 
 render(
