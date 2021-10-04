@@ -8,26 +8,34 @@ export const parseJSX = function (jsx) {
   const LEFT_CURLY = '{';
   const RIGHT_CURLY = '}';
 
+  let startIndex = -1;
+  let endIndex = -1;
+
   let at = -1;        // 当前解析的位置
   let stack = [];     // 放置已解析父结点的栈
   let source = jsx;
   let parent = null;  // 当前元素的父结点
 
   // 寻找目标字符
-  let seek = (target) => {
+  const seek = (target) => {
     let found = false;
-
     while (!found) {
+      if (at >= source.length) {
+        break;
+      }
       let ch = source.charAt(++at);
 
       if (ch === target) {
         found = true;
       }
     }
+    if (startIndex === -1) {
+      startIndex = at;
+    }
   };
 
   // 向前搜索目标信息
-  let explore = (target) => {
+  const explore = (target) => {
     let index = at;
     let found = false;
     let rangeStr = '';
@@ -47,6 +55,9 @@ export const parseJSX = function (jsx) {
       } else if (ch !== CLOSE_SLASH) {
         rangeStr += ch;
       }
+      if (at >= source.length) {
+        break;
+      }
     }
 
     return {
@@ -56,7 +67,7 @@ export const parseJSX = function (jsx) {
   };
 
   // 跳过空格
-  let skipSpace = () => {
+  const skipSpace = () => {
     while (true) {
       let ch = source.charAt(at + 1);
 
@@ -70,11 +81,18 @@ export const parseJSX = function (jsx) {
       } else {
         at++;
       }
+      if (at >= source.length) {
+        break;
+      }
     }
   };
 
   // 解析标签体
-  let parseTag = () => {
+  const parseTag = () => {
+    if (at >= source.length) {
+      return {}
+    }
+
     if (stack.length > 0) {
       let rangeResult = explore(TAG_LEFT);
 
@@ -117,6 +135,9 @@ export const parseJSX = function (jsx) {
           });
 
           currIndex = expr.endIndex + 1;
+          if (at >= source.length) {
+            break;
+          }
         }
 
         parent.children.push(...strAry);
@@ -136,6 +157,7 @@ export const parseJSX = function (jsx) {
       at++;
 
       let endResult = explore(TAG_RIGHT);
+      endIndex = endResult.at + 2;
 
       if (endResult.at > -1) {
         // 栈结构中只有一个结点 当前是最后一个闭合标签
@@ -151,9 +173,8 @@ export const parseJSX = function (jsx) {
         parent.children.push(completeTag);
 
         at = endResult.at;
-
+        
         parseTag();
-
         return completeTag;
       }
     }
@@ -172,6 +193,9 @@ export const parseJSX = function (jsx) {
 
     // 解析标签属性键值对
     while (true) {
+      if (at >= source.length) {
+        break;
+      }
       skipSpace();
 
       let attrKeyResult = explore(ATTR_EQUAL);
@@ -226,9 +250,9 @@ export const parseJSX = function (jsx) {
     // 检测是否为自闭合标签
     if (source.charAt(at - 1) === CLOSE_SLASH) {
       // 自闭合标签 追加到父标签children中 然后继续解析
+      endIndex = at + 1;
       if (stack.length > 0) {
         parent.children.push(elem);
-
         parseTag();
       }
     } else {
@@ -239,81 +263,13 @@ export const parseJSX = function (jsx) {
 
       parseTag();
     }
-
     return elem;
   };
-
- 
-  return parseTag();
+  const ast = parseTag();
+  return {
+    ast,
+    start: startIndex,
+    end: endIndex,
+  };
 }
 
-
-
-// 将树状属性结构转换输出可执行代码
-export function transform(elem) {
-  // 处理属性键值对
-  function processAttrs(attrs) {
-    let result = [];
-
-    let keys = Object.keys(attrs);
-
-    keys.forEach((key, index) => {
-      let type = attrs[key].type;
-      let value = attrs[key].value;
-
-      // 需要区分字符串和变量引用
-      let keyValue = `${key}: ${type === 'ref' ? value : '"' + value + '"'}`;
-
-      if (index < keys.length - 1) {
-        keyValue += ',';
-      }
-
-      result.push(keyValue);
-    });
-
-    if (result.length < 1) {
-      return 'null';
-    }
-
-    return '{' + result.join('') + '}';
-  }
-
-  // 处理结点元素
-  function processElem(elem, parent) {
-    let content = '';
-
-    // 处理子结点
-    elem.children.forEach((child, index) => {
-      // 子结点是标签元素
-      if (child.tag) {
-        content += processElem(child, elem);
-        return;
-      }
-
-      // 以下处理文本结点
-
-      if (child.type === 'expr') {
-        // 表达式
-        content += child.value;
-      } else {
-        // 字符串字面量
-        content += `"${child.value}"`;
-      }
-
-      if (index < elem.children.length - 1) {
-        content += ',';
-      }
-    });
-
-    let isLastChildren = elem === parent.children[parent.children.length -1];
-
-    return (
-      `React.createElement(
-          '${elem.tag}',
-          ${processAttrs(elem.attrs)}${content.trim().length ? ',' : ''}
-          ${content}
-      )${isLastChildren ? '' : ','}`
-    );
-  }
-  return processElem(elem, elem).replace(/,$/, '');
-}

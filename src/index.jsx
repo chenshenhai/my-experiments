@@ -3,6 +3,9 @@ import {
   useState,
 } from './lib/react.js';
 
+function App(props) {
+  return (<Count />);
+}
 
 function Count(props) {
   const [count, setCount] = useState(0);
@@ -10,18 +13,11 @@ function Count(props) {
   const onClick = () => {
     setCount(count + 1);
   }
-  return (
-    <div>
+  return (<div>
       <button className="btn" onClick={onClick}>Add</button>
       <span>Num: </span>
       <span>{count}</span>
-    </div>
-  )
-}
-
-
-function App(props) {
-  return (<Count></Count>);
+    </div>)
 }
 
 
