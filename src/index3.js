@@ -5,6 +5,9 @@ async function main() {
   const ast = parseJSX(jsx);
   const js = transform(ast);
   console.log('js====', js);
+
 }
+
+
 
 main();

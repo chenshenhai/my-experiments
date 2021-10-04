@@ -3,13 +3,13 @@ import {
   useState,
 } from './lib/react.js';
 
+
 function Count(props) {
   const [count, setCount] = useState(0);
   
   const onClick = () => {
     setCount(count + 1);
   }
-
   return (
     <div>
       <button className="btn" onClick={onClick}>Add</button>
@@ -19,9 +19,11 @@ function Count(props) {
   )
 }
 
+
 function App(props) {
-  return (<Count />);
+  return (<Count></Count>);
 }
+
 
 render(
   <App />,

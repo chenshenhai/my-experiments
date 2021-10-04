@@ -1,4 +1,4 @@
-export const parseJSX = function () {
+export const parseJSX = function (jsx) {
   const TAG_LEFT = '<';
   const TAG_RIGHT = '>';
   const CLOSE_SLASH = '/';
@@ -10,7 +10,7 @@ export const parseJSX = function () {
 
   let at = -1;        // 当前解析的位置
   let stack = [];     // 放置已解析父结点的栈
-  let source = '';    // 要解析的JSX代码内容
+  let source = jsx;
   let parent = null;  // 当前元素的父结点
 
   // 寻找目标字符
@@ -243,11 +243,9 @@ export const parseJSX = function () {
     return elem;
   };
 
-  return function (jsx) {
-    source = jsx;
-    return parseTag();
-  };
-}();
+ 
+  return parseTag();
+}
 
 
 
@@ -317,6 +315,5 @@ export function transform(elem) {
       )${isLastChildren ? '' : ','}`
     );
   }
-
   return processElem(elem, elem).replace(/,$/, '');
 }
