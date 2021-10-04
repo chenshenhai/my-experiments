@@ -7,11 +7,9 @@ export function transform(jsx) {
     const { start, end, ast } = result;
     const code = content.substring(start, end);
     content = content.replace(code, transformElement(ast));
-    console.log('-------');
     result = parseJSX(content);
     console.log(result);
   }
-  console.log('end ============================')
   return content;
 }
 
