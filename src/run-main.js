@@ -1,8 +1,7 @@
-import { 
-  createElement,
-  render,
-  useState,
- } from './lib/react.js';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const { createElement, useState, } = React;
 
 function Count(props) {
   const [count, setCount] = useState(0);
@@ -23,12 +22,11 @@ function Count(props) {
 }
 
 
-
 function App(props) {
   return createElement(Count, { id: 'dom-app' });
 }
 
-render(
+ReactDOM.render(
   createElement(App, null, {}),
   document.querySelector('#app')
 );

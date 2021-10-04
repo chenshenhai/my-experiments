@@ -1,4 +1,5 @@
 import { parseJSX } from './jsx.js';
+import { originTags } from './tag.js';
 
 export function transform(jsx) {
   let content = jsx;
@@ -8,13 +9,9 @@ export function transform(jsx) {
     const code = content.substring(start, end);
     content = content.replace(code, transformElement(ast));
     result = parseJSX(content);
-    console.log(result);
   }
   return content;
 }
-
-
-
 
 // 将树状属性结构转换输出可执行代码
 function transformElement(elem) {
@@ -73,10 +70,9 @@ function transformElement(elem) {
     });
 
     let isLastChildren = elem === parent.children[parent.children.length -1];
-
     return (
       `React.createElement(
-          '${elem.tag}',
+          ${originTags.includes(elem.tag) ? `'${elem.tag}'` : elem.tag},
           ${processAttrs(elem.attrs)}${content.trim().length ? ',' : ''}
           ${content}
       )${isLastChildren ? '' : ','}`
@@ -84,3 +80,4 @@ function transformElement(elem) {
   }
   return processElem(elem, elem).replace(/,$/, '');
 }
+

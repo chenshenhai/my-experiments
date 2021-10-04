@@ -1,7 +1,7 @@
-import {
-  render,
-  useState,
-} from './lib/react.js';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const { useState, } = React;
 
 function App(props) {
   return (<Count />);
@@ -20,8 +20,7 @@ function Count(props) {
     </div>)
 }
 
-
-render(
+ReactDOM.render(
   <App />,
   document.querySelector('#app')
 );
