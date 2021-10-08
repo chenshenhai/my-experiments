@@ -7,7 +7,7 @@
     "dev:ask": "node ./bin/index.js ask",
     "dev:init": "node ./bin/index.js init ./dist/example2"
   },
-  "devDependencies": {
+  "dependencies": {
     "commander": "^8.2.0",
     "inquirer": "^8.1.5"
   }
