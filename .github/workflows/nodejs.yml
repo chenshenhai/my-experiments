@@ -19,13 +19,12 @@ jobs:
         node-version: [16.x]
     steps:
     - uses: actions/checkout@v2
-
-    # MySQL
-    - name: Use MySQL
     - uses: shogo82148/actions-setup-mysql@v1
       with:
         mysql-version: '8.0'
     - run: mysql -uroot -h127.0.0.1 -e 'SELECT version()'
+
+    
 
     # # Nodejs
     # - name: Use Node.js ${{ matrix.node-version }}
