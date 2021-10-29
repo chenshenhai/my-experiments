@@ -33,6 +33,6 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm install
-        npm test -- --password=${{ secrets.DatabasePassword }}
+        npm  MYSQL_PWD=${{ secrets.DatabasePassword }} DATABASE=test_demo npm run test
       env:
         CI: true
