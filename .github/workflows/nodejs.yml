@@ -24,6 +24,8 @@ jobs:
         mysql-version: '8.0'
         root-password: ${{ secrets.DatabasePassword }}
     - run: mysql -uroot -p${{ secrets.DatabasePassword }} -h127.0.0.1 -e 'SELECT version()'
+    - run: ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${{ secrets.DatabasePassword }}';
+    - run: FLUSH PRIVILEGES;
     - uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
