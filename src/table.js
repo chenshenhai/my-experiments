@@ -1,10 +1,6 @@
-const { doConnect } = require('./util');
-
-main();
-
-async function main() {
-  await createTable();
-}
+const config = require('./config');
+const { createConnect } = require('./util');
+const doConnect = createConnect(config);
 
 async function createTable() {
   const sql = `
@@ -18,6 +14,10 @@ async function createTable() {
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   `;
   const result = await doConnect(sql);
-  console.log(result);
-  console.log('create table success!');
+  return result;
+}
+
+
+module.exports = {
+  createTable
 }

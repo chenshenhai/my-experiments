@@ -30,5 +30,5 @@ jobs:
         # cache: 'npm'
     - run: npm install
     # - run: npm run build --if-present
-    - run: npm test
+    - run: MYSQL_PWD=${{ secrets.DatabasePassword }} DATABASE=test_demo npm run test
     

@@ -1,9 +1,14 @@
 const moment = require('moment');
-const { doConnect } = require('./util');
-
+const { createConnect } = require('./util');
+const config = require('./config');
+const { createDatabase } = require('./database');
+const { createTable } = require('./table');
+const doConnect = createConnect(config);
 main();
 
 async function main() {
+  await createDatabase(config.database);
+  await createTable();
   await insertData();
   await insertList();
   await queryLastHourData();

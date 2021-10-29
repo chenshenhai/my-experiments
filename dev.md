@@ -15,3 +15,9 @@ ALTER USER 'xxxx'@'localhost' IDENTIFIED WITH mysql_native_password BY 'xxxxxxx'
 
 flush privileges;
 ```
+
+### Test by env
+
+```
+MYSQL_PWD=abcd1234 DATABASE=test_demo npm run test
+```

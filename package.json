@@ -1,8 +1,6 @@
 {
   "scripts": {
-    "db": "node ./src/database.js",
-    "tb": "node ./src/table.js",
-    "data": "node ./src/data.js",
+    "start": "node ./src/main.js",
     "test": "mocha --exit ./__tests__/"
   },
   "dependencies": {
