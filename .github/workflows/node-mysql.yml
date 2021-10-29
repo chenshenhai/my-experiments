@@ -1,0 +1,38 @@
+name: test
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['16.x']
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Shutdown Ubuntu MySQL (SUDO)
+      run: sudo service mysql stop
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Set up MySQL 8.0
+      uses: mirromutth/mysql-action@master
+      with:
+        mysql version: 8.0
+        mysql database: test
+        mysql root password: ${{ secrets.DatabasePassword }}
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm test -- --password=${{ secrets.DatabasePassword }}
+      env:
+        CI: true
