@@ -1,9 +1,6 @@
-const chai = require('chai');
-const process = require('process');
-const { createConnect, createPool } = require('./../src/util');
-
-const expect = chai.expect;
-const { DATABASE, MYSQL_PWD } = process.env || {};
+import process from 'process';
+import { createConnect, createPool } from '../src/util';
+const { DATABASE = '', MYSQL_PWD } = process.env || {};
 
 const config = {
   host : '127.0.0.1',
@@ -32,7 +29,7 @@ describe('test: index', ( ) => {
     return result;
   }
 
-  async function createDatabase(database) {
+  async function createDatabase(database: string) {
     const sql = `CREATE DATABASE ${database};`;
     const result = await doPool(sql);
     return result;
@@ -50,8 +47,8 @@ describe('test: index', ( ) => {
   }
   
   it('create database', (done) => {
-    createDatabase(DATABASE).then((result) => {
-      expect(result.affectedRows).equal(1);
+    createDatabase(DATABASE).then((result: any) => {
+      expect(result.affectedRows).toEqual(1);
       done();
     }).catch((err) => {
       done(err);
@@ -59,8 +56,8 @@ describe('test: index', ( ) => {
   });
 
   it('create table', (done) => {
-    createTable().then((result) => {
-      expect(result.affectedRows).equal(0);
+    createTable().then((result: any) => {
+      expect(result.affectedRows).toEqual(0);
       done();
     }).catch((err) => {
       done(err);
@@ -68,8 +65,8 @@ describe('test: index', ( ) => {
   });
 
   it('insert data', (done) => {
-    insertList().then((result) => {
-      expect(result.affectedRows).equal(5);
+    insertList().then((result: any) => {
+      expect(result.affectedRows).toEqual(5);
       done();
     }).catch((err) => {
       done(err);
@@ -77,3 +74,7 @@ describe('test: index', ( ) => {
   });
 
 })
+
+// test('test dom', async () => {
+//   expect(1+1).toEqual(2);
+// });
