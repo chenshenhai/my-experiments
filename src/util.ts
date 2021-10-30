@@ -1,7 +1,7 @@
-const mysql = require('mysql');
+import mysql from 'mysql';
 
-function createPool(config) {
-  return function doPool(sql) {
+function createPool(config: any) {
+  return function doPool(sql: string) {
     return new Promise((resolve, reject) => {
       const pool = mysql.createPool({
         host : config.host,
@@ -14,19 +14,19 @@ function createPool(config) {
           reject(error);
         } else {
           pool.end();
-          resolve(results, fields);
+          resolve(results);
         }
       });
     });
   }
 }
 
-function createConnect(config) {
-  return function doConnect(sql, values) {
+function createConnect(config: any) {
+  return function doConnect(sql:string, values?: any) {
     const conn = mysql.createConnection(config)
     conn.connect();
     return new Promise((resolve, reject) => {
-      conn.query(sql, values, (err, rows) => {
+      conn.query(sql, values, (err: any, rows: any) => {
         if (err) {
           conn.end();
           reject(err);
@@ -41,7 +41,7 @@ function createConnect(config) {
 
 
 
-module.exports = {
+export {
   createPool,
   createConnect,
 }

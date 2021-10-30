@@ -1,5 +1,6 @@
-const config = require('./config');
-const { createConnect } = require('./util');
+import config from './config'
+import { createConnect } from './util';
+
 const doConnect = createConnect(config);
 
 async function createTable() {
@@ -18,6 +19,6 @@ async function createTable() {
 }
 
 
-module.exports = {
+export {
   createTable
 }

@@ -1,9 +1,12 @@
-const moment = require('moment');
-const { createConnect } = require('./util');
-const config = require('./config');
-const { createDatabase } = require('./database');
-const { createTable } = require('./table');
+
+import moment from 'moment';
+import { createConnect } from './util';
+import config from './config';
+import { createDatabase } from './database';
+import { createTable } from './table';
+
 const doConnect = createConnect(config);
+
 main();
 
 async function main() {
@@ -23,7 +26,7 @@ async function insertData() {
     name: 'Hello',
     password: Math.random().toString(36).substr(2),
   }
-  const result = await doConnect(sql, values);
+  const result: any = await doConnect(sql, values);
   if (result.insertId > 0) {
     console.log('insert table success!');
   } else {
@@ -39,7 +42,7 @@ async function insertList() {
   const values =  [0, 1, 2, 3, 4].map((i) => {
     return [`Hello${i}`, Math.random().toString(36).substr(2)]
   })
-  const result = await doConnect(sql, [values]);
+  const result: any = await doConnect(sql, [values]);
   if (result.insertId > 0) {
     console.log('insert table success!');
   } else {
