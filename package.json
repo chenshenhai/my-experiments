@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node ./src/main.js",
-    "test": "nyc --reporter=html --reporter=text mocha --exit ./__tests__/"
+    "test": "nyc --reporter=html --reporter=text mocha --exit ./__tests__/*.test.js"
   },
   "dependencies": {
     "moment": "^2.29.1",
