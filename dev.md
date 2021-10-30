@@ -19,5 +19,5 @@ flush privileges;
 ### Test by env
 
 ```
-MYSQL_PWD=abcd1234 DATABASE=test_demo npm run test
+MYSQL_PWD=abcd1234 DATABASE=test_demo003 npm run test
 ```
