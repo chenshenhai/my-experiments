@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "jest"
+    "test": "jest -c ./jest.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

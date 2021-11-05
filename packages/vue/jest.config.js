@@ -1,5 +1,6 @@
 module.exports = {
   "testEnvironment": "jsdom",
+  // "testEnvironment": "jest-environment-jsdom-fifteen",
   "collectCoverageFrom": [
     "src/**/*.js",
     "src/**/*.jsx",
@@ -7,8 +8,8 @@ module.exports = {
     "src/**/*.tsx",
     "!**/node_modules/**"
   ],
-  // "coverageDirectory": "coverage-reports",
   // "collectCoverage": true,
+  // "coverageDirectory": "coverage-reports",
   // "coverageReporters": [
   //   "clover",
   //   "html",
