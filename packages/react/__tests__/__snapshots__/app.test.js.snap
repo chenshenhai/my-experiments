@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test React app App render 1`] = `
+<div>
+  <div>
+    count:
+    200
+  </div>
+  <button
+    onClick={[Function]}
+  >
+    Add
+  </button>
+</div>
+`;
