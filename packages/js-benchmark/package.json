@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "test": "node ./benchmark/index.js"
+  },
+  "devDependencies": {
+    "benchmark": "^2.1.4"
+  }
+}
