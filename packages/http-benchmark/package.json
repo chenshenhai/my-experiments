@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "test": "node ./benchmark/index.js"
+  },
+  "devDependencies": {
+    "autocannon": "^7.5.0"
+  },
+  "dependencies": {
+    "koa": "^2.13.4"
+  }
+}
+
