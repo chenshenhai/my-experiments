@@ -8,7 +8,7 @@ const request = supertest( app.listen() )
 describe( 'Test HTTP Server', ( ) => {
   
   it('Get: /get-str', (done) => {
-    request
+    request 
       .get('/get-str')
       .expect(200)
       .end(( err, res ) => {
