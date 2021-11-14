@@ -1,14 +1,15 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ENV = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
-const fileResolve = function (file) {
+import { Configuration } from 'webpack';
+
+import path from 'path';
+import webpack from 'webpack';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
+const fileResolve = function (file: string) {
   return path.join(__dirname, '..', file);
 };
 
-module.exports = {
-  mode: ENV,  
- 
+const config: Configuration = {
   entry: {
     'index' : fileResolve('src/index.tsx'),
   },
@@ -61,14 +62,6 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          // {
-          //   loader: 'postcss-loader',
-          //   options: {
-          //     plugins: () => {
-          //       return [];
-          //     }
-          //   }
-          // },
           'less-loader'
         ]
       }
@@ -82,11 +75,6 @@ module.exports = {
       filename: 'dist/[name].css'
     })
   ],
-
-  devServer: {
-    contentBase: path.join(__dirname, '..'),
-    port: 9000,
-    hot: false,
-    inline: false,
-  }
 }
+
+export default config;
