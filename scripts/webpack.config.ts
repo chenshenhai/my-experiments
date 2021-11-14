@@ -1,8 +1,6 @@
 
 import { Configuration } from 'webpack';
-
 import path from 'path';
-import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const fileResolve = function (file: string) {
@@ -11,12 +9,12 @@ const fileResolve = function (file: string) {
 
 const config: Configuration = {
   entry: {
-    'index' : fileResolve('src/index.tsx'),
+    'index' : fileResolve('src/front/index.tsx'),
   },
  
   output: {
     path: fileResolve(''),
-    filename: 'dist/[name].js',
+    filename: 'dist/front/[name].js',
   },
   module: { 
     rules: [

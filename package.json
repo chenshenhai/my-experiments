@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "ts-node ./scripts/dev.ts",
-    "build": "ts-node ./scripts/build.ts"
+    "dev:front": "ts-node ./scripts/dev-front.ts",
+    "build:front": "ts-node ./scripts/build-front.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
