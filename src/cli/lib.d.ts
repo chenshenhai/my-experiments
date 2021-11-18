@@ -1,5 +1,4 @@
-
-// declare module "./../../package.json" {
-//   const mod: any;
-//   export default mod;
-// }
+declare module "*.json" {
+  const mod: any;
+  export default mod;
+}
