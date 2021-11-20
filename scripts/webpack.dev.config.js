@@ -83,10 +83,15 @@ module.exports = {
     })
   ],
 
+  externals: {
+    'react': 'window.React',
+    'react-dom': 'window.ReactDOM',
+  },
   devServer: {
     contentBase: path.join(__dirname, '..'),
     port: 9000,
-    hot: false,
-    inline: false,
+    hot: true,
+    open: '/example/index.html'
+    // inline: false,
   }
 }
