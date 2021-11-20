@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ENV = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
@@ -59,7 +60,7 @@ module.exports = {
       {
         test: /\.(css|less)$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          // MiniCssExtractPlugin.loader,
           'css-loader',
           // {
           //   loader: 'postcss-loader',
@@ -75,17 +76,20 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.jsx', '.js' ],
+    extensions: ['.jsx', '.js', '.ts', '.tsx' ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'dist/[name].css'
-    })
+    // new MiniCssExtractPlugin({
+    //   filename: 'dist/[name].css'
+    // }),
+    new webpack.HotModuleReplacementPlugin()
   ],
-
   externals: {
     'react': 'window.React',
     'react-dom': 'window.ReactDOM',
+  },
+  optimization: {
+    moduleIds: 'named',
   },
   devServer: {
     contentBase: path.join(__dirname, '..'),
