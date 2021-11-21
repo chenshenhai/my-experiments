@@ -1,14 +1,15 @@
 const path = require('path');
+const fs = require('fs');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ENV = process.env.NODE_ENV === 'development' ? 'development' : 'production';
+const MyPlugin = require('./plugin');
 
 const fileResolve = function (file) {
   return path.join(__dirname, '..', file);
 };
 
 module.exports = {
-  mode: ENV,  
- 
+  mode: 'development',  
+  // devtool: 'cheap-source-map',
   entry: {
     'index' : fileResolve('src/index.jsx'),
   },
@@ -56,13 +57,18 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'dist/[name].css'
-    })
+    }),
+    // new MyPlugin()
   ],
-
+  externals: {
+    'react': 'window.React',
+    'react-dom': 'window.ReactDOM',
+  },
   devServer: {
-    contentBase: path.join(__dirname, '..'),
+    static: {
+      directory: path.join(__dirname, '..'),
+    },
     port: 9000,
     hot: false,
-    inline: false,
   }
 }
