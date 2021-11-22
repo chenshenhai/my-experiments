@@ -17,7 +17,8 @@
     "requirejs": "^2.3.6",
     "rollup": "^2.52.7",
     "rollup-plugin-external-globals": "^0.6.1",
-    "rollup-plugin-postcss": "^4.0.0"
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-serve": "^1.1.0"
   },
   "dependencies": {
     "koa": "^2.13.1",
