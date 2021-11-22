@@ -2,19 +2,6 @@ const extname = require("path").extname;
 const { createFilter } = require('@rollup/pluginutils');
 const MagicString = require('magic-string');
 
-// function clearConsole(code) {
-//   let replaceList = [
-//     { reg: /\.console\.(log)\(\)/g, replace: '' },
-//     { reg: /\.console\.(log)\(/g, replace: ';(' },
-//     { reg: /console\.(log)\(\)/g, replace: '' },
-//     { reg: /console\.(log)\(/g, replace: '(' },
-//   ]
-//   replaceList.forEach(item => {
-//     code = code.replace(item.reg, item.replace);
-//   })
-//   return code;
-// }
-
 
 function MyPlugin (options = {}) {
   const filter = createFilter(options.include, options.exclude);
@@ -24,26 +11,31 @@ function MyPlugin (options = {}) {
 		name: 'my-plugin',
 
 		transform (code, id) {
-      if (!filter(id) || extname(id) !== ".js") return;
+      if (['.jsx', '.js'].includes(extname(id)) !== true) {
+        return;
+      }
 
       let codeStr = `${code}`;
       const magic = new MagicString(codeStr);
-      if (sourcemap === true) {
-        codeStr = codeStr.replace(/hello\sworld/ig, function(match, offset) {
+
+      codeStr = codeStr.replace(/[\.]{0,1}console\.(log)\(/ig, function(match, offset) {
+        const newStr = ';(';
+        const end = offset + newStr.length;
+        if (sourcemap === true) {
           const start = offset;
-          const end = offset + match.length;
           magic.overwrite(start, end, newStr);
-          return newStr;
-        });
-      }
-      
-      const resultCode = magic.toString();
+        }
+        return newStr;
+      });
+
+      const resultCode = codeStr; // magic.toString();
       let resultMap = false;
       if (sourcemap === true) {
         resultMap = magic.generateMap({
           hires: true,
         });
       }
+
 			return {
 				code: resultCode,
 				map: resultMap,
