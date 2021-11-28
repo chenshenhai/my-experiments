@@ -1,10 +1,17 @@
+import { compile } from './compile.js'; 
+
 class Template {
   constructor() {
+    this._tplFunc = () => {};
+  }
 
+  load(tpl) {
+    const func = compile(tpl);
+    this._tplFunc = func;
   }
 
   render(root, data) {
-    console.log('root ====', root)
+    root.innerHTML = this._tplFunc(data);
   }
 }
 

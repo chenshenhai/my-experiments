@@ -9,11 +9,60 @@
     </script>
   </head>
   <body>
-
+    <div id="app"></div>
   </body>
+
   <script type="module">
   import Template from 'tpl';
   const tpl = new Template();
-  tpl.render('xxxx', '11111')
+  const view = `
+  <div>
+    <ul>
+      <% for(let i = 0; i < list.length; i++) { %>
+      <li> list[<%= i%>] = <%= list[i] %></li>
+      <% } %>
+    </ul>
+
+    <% if (isShow === true) {%>
+    <div >
+      <div><%= str %></div>
+    </div>
+    <% } %>
+  </div>
+  `
+  const data = {
+    list: [ 'item-001', 'item-002', 'item-003', 'item-004'],
+    listChild: [
+      {
+        name: "item-1",
+        children: [
+          {
+            name: "child-1-1",
+          },
+          {
+            name: "child-1-2",
+          }
+        ]
+      },
+      {
+        name: "item-2",
+        children: [
+          {
+            name: "child-2-1",
+          },
+          {
+            name: "child-2-2",
+          },
+          {
+            name: "child-3-2",
+          }
+        ]
+      }
+    ],
+    isShow: true,
+    str: 'Hello World',
+  }
+  tpl.load(view);
+  tpl.render(document.querySelector('#app'), data)
   </script>
 </html>
