@@ -17,17 +17,34 @@
   const tpl = new Template();
   const view = `
   <div>
+
+    {{ $if (isShow === true) }}
+      <div >
+        <div>{{ str }}</div>
+      </div>
+    {{ $end }}
+
     <ul>
-      <% for(let i = 0; i < list.length; i++) { %>
-      <li> list[<%= i%>] = <%= list[i] %></li>
-      <% } %>
+      {{ $for(let i = 0; i < list.length; i++) }}
+        <li> {{ i }}: {{ list[i] }}</li>
+      {{ $end }}
     </ul>
 
-    <% if (isShow === true) {%>
-    <div >
-      <div><%= str %></div>
+    <div>
+      {{ $for(let i = 0; i < listChild.length; i++) }}
+        <ul>
+          <li> list[{{ i }}] = {{ listChild[i].name }}</li>
+          <li>
+            <ul>
+            {{ $for(let j = 0; j < listChild[i].children.length; j++) }}
+              <li> {{i}}-{{j}}:  {{ listChild[i].children[j].name }}</li>
+            {{ $end }}
+            </ul>
+          </li>
+        </ul>
+      {{ $end }}
     </div>
-    <% } %>
+
   </div>
   `
   const data = {
