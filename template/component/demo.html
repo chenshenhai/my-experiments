@@ -1,0 +1,17 @@
+<view>
+  <view class="box-1">{{title}}</view>
+  <view class="box-2">{{subTitle}}</view>
+  <view class="box-3" xx:for="{{list}}"> 
+    {{item}}
+  </view>
+
+  <view class="box-4" xx:if="{{type == '1'}}">
+    001
+  </view>
+  <view class="box-4" xx:elif="{{type == '2'}}">
+    002
+  </view>
+  <view class="box-4" xx:else>
+    003
+  </view>
+</view>
