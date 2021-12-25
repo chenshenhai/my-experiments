@@ -1,5 +1,5 @@
 
-function parse(html) {
+function html2ast(html) {
   const startTag = /<([a-zA-Z_][\w\-\.]*)((?:\s+([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))*)\s*(\/?)>/;
   const endTag = /<\/([a-zA-Z_][\w\-\.]*)>/;
   const attr = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/g;
@@ -101,4 +101,4 @@ function parse(html) {
   return result;
 }
 
-export default parse;
+export default html2ast;
