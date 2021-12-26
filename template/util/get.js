@@ -31,5 +31,11 @@ export async function getComponent(name) {
     getHTML(name),
     getJS(name),
     getCSS(name)
-  ])
+  ]).then((list) => {
+    return {
+      html: list[0],
+      js: list[1],
+      css: list[2]
+    }
+  })
 }
