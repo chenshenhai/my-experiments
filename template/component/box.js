@@ -1,5 +1,4 @@
 Page({
-
   data: {
     title: '这是一个测试组件',
     subTitle: 'Hello Component',
@@ -15,6 +14,6 @@ Page({
   },
 
   myClickAction: function() {
-    this.setData({ msg: "Hello World" })
+    this.setData({ title: "Hello World" })
   }
 })

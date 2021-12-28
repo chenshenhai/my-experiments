@@ -47,11 +47,11 @@ function html2ast(html) {
           type: 'text',
           text
         };
-        pushchildren(node);
+        pushChildren(node);
       }
     }
   }
-  function pushchildren(node) {
+  function pushChildren(node) {
     if (bufArray.length === 0) {
       result.children.push(node);
     } else {
@@ -66,6 +66,7 @@ function html2ast(html) {
     tagName = tagName.toLowerCase();
     const attributes = {};
     const directives = {};
+    const events = {};
     let unary = !!arguments[7];
     const node = {
       type: 'element',
@@ -76,7 +77,9 @@ function html2ast(html) {
       const value = arguments[2] ? arguments[2] : 
           arguments[3] ? arguments[3] : 
             arguments[4] ? arguments[4] : '';
-      if (name.indexOf('x:') >= 0) {
+      if (['bindtap'].includes(name)) {
+        events['bindtap'] = value;
+      } else if (name.indexOf('xx:') >= 0) {
         if (value.indexOf('{{') >= 0) {
           directives[name] = value
         } else {
@@ -92,7 +95,7 @@ function html2ast(html) {
     if (!unary) {
       bufArray.push(node);
     } else {
-      pushchildren(node);
+      pushChildren(node);
     }
   }
   function parseEndTag(tag, tagName) {
@@ -103,7 +106,7 @@ function html2ast(html) {
       }
     }
     if (position >= 0) {
-      pushchildren(bufArray.pop());
+      pushChildren(bufArray.pop());
     }
   }
   return result;
