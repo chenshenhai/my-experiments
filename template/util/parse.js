@@ -12,6 +12,11 @@ function parseText(text = '') {
   return text.replace(/{{/g, '" +').replace(/}}/g, '+ "')
 }
 
+const elementMap = {
+  'view': '\"div\"',
+  'text': '\"span\"',
+}
+
 function parseAST(ast, props = {}) {
   // const dataKeys = Object.keys(props.data || {});
   // console.log('dataKeys =', dataKeys)
@@ -31,18 +36,22 @@ function parseAST(ast, props = {}) {
     let ifDirect = '';
     if (directs['xx:if']) {
       ifDirect = `(${directs['xx:if']}) && `
+    } 
+
+    function createCode() {
+      return `${ifDirect}React.createElement(
+        ${elementMap[ast.tag] || `"${ast.tag}"`},
+        ${JSON.stringify(ast.attributes || {})},
+        ${ast.children?.map((child) => {
+          return parseAST(child, props)
+        }).join(', ')}
+      )`;
     }
 
-    code = `${ifDirect}React.createElement(
-      "${ast.tag}",
-      ${JSON.stringify(ast.attributes || {})},
-      ${ast.children?.map((child) => {
-        return parseAST(child, props)
-      }).join(', ')}
-    )`;
+    code = createCode()
     if (directs['xx:for']) {
-      code = `${directs['xx:for']}.map((item) => {
-        return ${code};
+      code = `${directs['xx:for']}.map((item, idx) => {
+        return ${createCode({})};
       })`
     }
   } else if (ast.type === 'text') {
