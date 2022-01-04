@@ -1,18 +1,5 @@
-const lookup =  {
-  "area": true,
-  "base": true,
-  "br": true,
-  "col": true,
-  "embed": true,
-  "hr": true,
+const unclosedElements =  {
   "img": true,
-  "input": true,
-  "link": true,
-  "meta": true,
-  "param": true,
-  "source": true,
-  "track": true,
-  "wbr": true
 };
 const attrRE = /\s([^'"/\s><]+?)[\s/>]|([^\s=]+)=\s?(".*?"|'.*?')/g
 const elementRE = /<[a-zA-Z0-9\-\!\/](?:"[^"]*"|'[^']*'|[^'">])*>/g
@@ -22,8 +9,10 @@ function parseElement(element) {
   const res = {
     type: 'element',
     name: '',
-    voidElement: false,
-    attrs: {},
+    unclosed: false,
+    attributes: {},
+    directives: {},
+    events: {},
     children: [],
   }
 
@@ -31,10 +20,10 @@ function parseElement(element) {
   if (elementMatch) {
     res.name = elementMatch[1]
     if (
-      lookup[elementMatch[1]] ||
+      unclosedElements[elementMatch[1]] ||
       element.charAt(element.length - 2) === '/'
     ) {
-      res.voidElement = true
+      res.unclosed = true
     }
 
     // handle comment element
@@ -63,26 +52,20 @@ function parseElement(element) {
     if (result[1]) {
       const attr = result[1].trim()
       let arr = [attr, '']
-
       if (attr.indexOf('=') > -1) {
         arr = attr.split('=')
       }
-
-      res.attrs[arr[0]] = arr[1]
+      res.attributes[arr[0]] = arr[1]
       reg.lastIndex--
     } else if (result[2]) {
-      res.attrs[result[2]] = result[3].trim().substring(1, result[3].length - 1)
+      res.attributes[result[2]] = result[3].trim().substring(1, result[3].length - 1)
     }
   }
 
   return res
 }
 
-const empty = Object.create(null);
-
-function parse(html, options) {
-  options || (options = {})
-  options.components || (options.components = empty)
+function parse(html) {
   const result = []
   const arr = []
   let current
@@ -129,13 +112,8 @@ function parse(html, options) {
       level++
 
       current = parseElement(element)
-      if (current.type === 'element' && options.components[current.name]) {
-        current.type = 'component'
-        inComponent = true
-      }
-
       if (
-        !current.voidElement &&
+        !current.unclosed &&
         !inComponent &&
         nextChar &&
         nextChar !== '<'
@@ -160,10 +138,10 @@ function parse(html, options) {
       arr[level] = current
     }
 
-    if (!isOpen || current.voidElement) {
+    if (!isOpen || current.unclosed) {
       if (
         level > -1 &&
-        (current.voidElement || current.name === element.slice(2, -1))
+        (current.unclosed || current.name === element.slice(2, -1))
       ) {
         level--
         current = level === -1 ? result : arr[level]
