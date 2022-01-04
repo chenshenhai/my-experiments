@@ -1,0 +1,15 @@
+<view>
+  <view class="box-1">{{title}}</view>
+  <view class="box-2">{{subTitle}}</view>
+  <view class="box-3" xx:for="{{list}}" > 
+    {{item}}
+  </view>
+
+  <view class="box-4" xx:if="{{type == '1'}}" >
+    001
+  </view>
+  <view class="box-4" xx:if="{{type == '2'}}" >
+    002
+  </view>
+  <view bindtap="myClickAction">Click Me</view>
+</view>
