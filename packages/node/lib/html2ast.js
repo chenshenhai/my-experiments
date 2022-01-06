@@ -5,6 +5,16 @@ const attrRE = /\s([^'"/\s><]+?)[\s/>]|([^\s=]+)=\s?(".*?"|'.*?')/g
 const elementRE = /<[a-zA-Z0-9\-\!\/](?:"[^"]*"|'[^']*'|[^'">])*>/g
 const whitespaceRE = /^\s*$/
 
+function setAttr(elem, key, val) {
+  if (key.startsWith('@:')) {
+    elem.directives[key] = val;
+  } else if (['bindtap'].includes(key)) {
+    elem.events[key] = val;
+  } else {
+    elem.attributes[key] = val;
+  }
+}
+
 function parseElement(element) {
   const res = {
     type: 'element',
@@ -38,7 +48,7 @@ function parseElement(element) {
 
   const reg = new RegExp(attrRE)
   let result = null
-  for (;;) {
+  while (true) {
     result = reg.exec(element)
 
     if (result === null) {
@@ -55,10 +65,10 @@ function parseElement(element) {
       if (attr.indexOf('=') > -1) {
         arr = attr.split('=')
       }
-      res.attributes[arr[0]] = arr[1]
+      setAttr(res, arr[0], arr[1])
       reg.lastIndex--
     } else if (result[2]) {
-      res.attributes[result[2]] = result[3].trim().substring(1, result[3].length - 1)
+      setAttr(res, result[2], result[3].trim().substring(1, result[3].length - 1))
     }
   }
 
@@ -71,15 +81,6 @@ function parse(html) {
   let current
   let level = -1
   let inComponent = false
-
-  // handle text at top level
-  if (html.indexOf('<') !== 0) {
-    var end = html.indexOf('<')
-    result.push({
-      type: 'text',
-      content: end === -1 ? html : html.substring(0, end),
-    })
-  }
 
   html.replace(elementRE, function (element, index) {
     if (inComponent) {
@@ -124,7 +125,6 @@ function parse(html) {
         })
       }
 
-      // if we're at root, push new base node
       if (level === 0) {
         result.push(current)
       }
