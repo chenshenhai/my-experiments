@@ -104,6 +104,54 @@ function createConditionElement(consequentAst, alternateAst) {
   return result
 }
 
+function createListElement(htmlAst, listKey, indexKey, itemKey) {
+  htmlAst.attributes['key'] = indexKey;
+  const result = {
+    "type": "CallExpression",
+    "callee": {
+      "type": "MemberExpression",
+      "object": {
+        "type": "Identifier",
+        "name": listKey
+      },
+      "computed": false,
+      "property": {
+        "type": "Identifier",
+        "name": "map"
+      }
+    },
+    "arguments": [
+      {
+        "type": "ArrowFunctionExpression",
+        "id": null,
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "name": itemKey
+          },
+          {
+            "type": "Identifier",
+            "name": indexKey
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ReturnStatement",
+              "argument": createElement(htmlAst)
+            }
+          ],
+          "directives": []
+        }
+      }
+    ]
+  }
+  return result;
+}
+
 function createElement(htmlAst) {
   const result = {
     "type": "CallExpression",
@@ -141,18 +189,25 @@ function createElement(htmlAst) {
               otherChild = htmlAst.children[i];
             }
             result.arguments.push(createConditionElement(child, otherChild))
+            i++;
+            continue;
           }
-        } else {
-          result.arguments.push(createElement(child))
+        }
+
+        if (child.directives['@:for']) {
+          const listKey = child.directives['@:for'].replace(/({{|}})/g, '').trim();
+          const indexKey = child.directives['@:for-index'].replace(/({{|}})/g, '').trim() || 'index';
+          const itemKey = child.directives['@:for-item'].replace(/({{|}})/g, '').trim() || 'item';
+          result.arguments.push(createListElement(child, listKey, indexKey, itemKey))
+          i++;
+          continue;
         } 
+        result.arguments.push(createElement(child));
       }
       i++;
-    }
-    
-    return result;
+    }  
   }
-
-  
+  return result;
 }
 
 function createObject(obj) {
