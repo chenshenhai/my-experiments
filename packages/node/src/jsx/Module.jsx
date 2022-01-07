@@ -1,11 +1,11 @@
 function Module(props) {
-  const { name, bindtap, list = [] } = props;
+  const { myname, bindtap, list = [] } = props;
   return (
-    <div>
-      <div>
-        {name ? (<span>My name is {name}</span>) : (<span>No Name</span>)}
+    <div className="class001">
+      <div className="class002">
+        {myname ? (<span>My name is {myname}</span>) : (<span>No Name</span>)}
       </div>
-      <div>
+      <div className="class003">
         {list.map((item, i) => {
           return (<span key={i}>{item}</span>)
         })}

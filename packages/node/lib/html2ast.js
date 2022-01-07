@@ -119,10 +119,14 @@ function parse(html) {
         nextChar &&
         nextChar !== '<'
       ) {
-        current.children.push({
-          type: 'text',
-          content: html.slice(start, html.indexOf('<', start)),
-        })
+        const content = html.slice(start, html.indexOf('<', start));
+        if (content.trim()) {
+          current.children.push({
+            type: 'text',
+            content: content.trim(),
+          })
+        }
+        
       }
 
       if (level === 0) {
@@ -156,10 +160,12 @@ function parse(html) {
         }
         
         if ((end > -1 && level + parent.length >= 0) || content !== ' ') {
-          parent.push({
-            type: 'text',
-            content: content,
-          })
+          if (content.trim()) {
+            parent.push({
+              type: 'text',
+              content: content.trim(),
+            })
+          }
         }
       }
     }
