@@ -1,4 +1,4 @@
-import parse from './html2ast.js';
+import { parse } from './html2ast.js';
 import ast2react from './ast2react.js';
 import ast2vue from './ast2vue.js';
 

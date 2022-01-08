@@ -1,66 +1,92 @@
-// {
-//   "type": "root",
-//   "children": [
-//       {
-//           "type": "element",
-//           "tag": "div",
-//           "attributes": {
-//               "class": "box-1"
-//           },
-//           "children": [
-//               {
-//                   "type": "element",
-//                   "tag": "img",
-//                   "attributes": {
-//                       "src": "xxxxx/xxxx/xxx/x.jpg"
-//                   }
+// [
+//   {
+//       "type": "element",
+//       "name": "div",
+//       "unclosed": false,
+//       "attributes": {
+//           "class": "box-1"
+//       },
+//       "directives": {},
+//       "events": {},
+//       "children": [
+//           {
+//               "type": "element",
+//               "name": "div",
+//               "unclosed": false,
+//               "attributes": {
+//                   "class": "box-2"
 //               },
-//               {
-//                   "type": "element",
-//                   "tag": "div",
-//                   "attributes": {
-//                       "class": "box-2"
+//               "directives": {},
+//               "events": {},
+//               "children": [
+//                   {
+//                       "type": "text",
+//                       "content": "Hello"
 //                   },
-//                   "children": [
-//                       {
-//                           "type": "text",
-//                           "text": "Hello 002"
+//                   {
+//                       "type": "element",
+//                       "name": "span",
+//                       "unclosed": false,
+//                       "attributes": {
+//                           "class": "box-3"
 //                       },
-//                       {
-//                           "type": "element",
-//                           "tag": "span",
-//                           "attributes": {
-//                               "class": "box-3"
-//                           },
-//                           "children": [
-//                               {
-//                                   "type": "text",
-//                                   "text": "Hello 003"
-//                               }
-//                           ]
-//                       }
-//                   ]
-//               }
-//           ]
-//       }
-//   ]
-// }
+//                       "directives": {},
+//                       "events": {},
+//                       "children": [
+//                           {
+//                               "type": "text",
+//                               "content": "001"
+//                           }
+//                       ]
+//                   },
+//                   {
+//                       "type": "element",
+//                       "name": "span",
+//                       "unclosed": false,
+//                       "attributes": {
+//                           "class": "box-4"
+//                       },
+//                       "directives": {},
+//                       "events": {},
+//                       "children": [
+//                           {
+//                               "type": "text",
+//                               "content": "002"
+//                           }
+//                       ]
+//                   }
+//               ]
+//           },
+//           {
+//               "type": "element",
+//               "name": "div",
+//               "unclosed": false,
+//               "attributes": {
+//                   "class": "box-5"
+//               },
+//               "directives": {},
+//               "events": {},
+//               "children": [
+//                   {
+//                       "type": "text",
+//                       "content": "Hello World"
+//                   }
+//               ]
+//           }
+//       ]
+//   }
+// ]
 
 
 function parseAST(ast) {
   let code = '';
-  if (ast.type === 'root') {
-    let children = ast.children.map((child) => {
-      return parseAST(child);
-    })
-    code = children.join(', ')
-  } else if (ast.type === 'element') {
+  if (ast.type === 'element') {
     if (ast.attributes?.class) {
       ast.attributes.className = ast.attributes?.class;
       delete ast.attributes.class;
     }
     code = `React.createElement(
-      "${ast.tag}",
+      "${ast.name}",
       ${JSON.stringify(ast.attributes || {})},
       ${ast.children?.map((child) => {
         return parseAST(child)
@@ -68,7 +94,7 @@ function parseAST(ast) {
     )
     `
   } else if (ast.type === 'text') {
-    code = `"${ast.text || ''}"`;
+    code = `"${ast.content || ''}"`;
   }
   return code;
 }
@@ -79,8 +105,8 @@ function ast2react(ast) {
     return React.createElement('div', {});
   }
   `;
-  if (ast) {
-    code = parseAST(ast);
+  if (ast[0]) {
+    code = parseAST(ast[0]);
     code = `
     function App() {
       return ${code}
