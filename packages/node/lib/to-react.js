@@ -71,7 +71,7 @@ function createConstVar(vars) {
 }
 
 function createReturn(htmlAst) {
-  console.log('htmlAst =', htmlAst);
+  // console.log('htmlAst =', htmlAst);
   // const ast = 
   return {
     "type": "ReturnStatement",
@@ -102,6 +102,20 @@ function createConditionElement(consequentAst, alternateAst) {
     alternate,
   }
   return result
+}
+
+function createVar(name) {
+  return {
+    "type": "Identifier",
+    "name": name
+  }
+}
+
+function createStr(str) {
+  return {
+    "type": "StringLiteral",
+    "value": str
+  }
 }
 
 function createListElement(htmlAst, listKey, indexKey, itemKey) {
@@ -149,6 +163,57 @@ function createListElement(htmlAst, listKey, indexKey, itemKey) {
       }
     ]
   }
+  return result;
+}
+
+function createTextList(htmlAst) {
+  const content = htmlAst.content.trim();
+  let indexList = [];
+  content.replace(/{{\s*[a-zA-Z0-9\_]{2,}\s*}}/g, (match, index) => {
+    if (indexList.length === 0 && index > 0) {
+      indexList.push({
+        type: 'str',
+        start: 0,
+        end: index,
+      })
+    } else if (indexList.length > 0 && indexList[indexList.length - 1].end <= index) {
+      indexList.push({
+        type: 'str',
+        start: indexList[indexList.length - 1].end,
+        end: index,
+      })
+    }
+    indexList.push({
+      type: 'var',
+      start: index,
+      end: index + match.length,
+    })
+  });
+
+  if (indexList.length > 0 && indexList[indexList.length - 1].end < content.length) {
+    indexList.push({
+      type: 'str',
+      start: indexList[indexList.length - 1].end,
+      end: content.length,
+    })
+  } else if (indexList.length === 0 && content.length > 0) {
+    indexList.push({
+      type: 'str',
+      start: 0,
+      end: content.length,
+    })
+  }
+  const result = [];
+  indexList.forEach((item) => {
+    if (item.type === 'var') {
+      const varname = content.substring(item.start, item.end).replace(/({{|}})/g, '').trim();
+      result.push(createVar(varname))
+    } else {
+      result.push(createStr(content.substring(item.start, item.end)))
+    }
+  })
+  // TODO
+  console.log('result =', result)
   return result;
 }
 
@@ -203,6 +268,8 @@ function createElement(htmlAst) {
           continue;
         } 
         result.arguments.push(createElement(child));
+      } else if (child.type === 'text') {
+        result.arguments = result.arguments.concat(createTextList(child));
       }
       i++;
     }  
