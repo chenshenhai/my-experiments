@@ -1,4 +1,4 @@
-import html2ast from './html2ast.js';
+import { parse } from './html2ast.js';
 
 function parseDirectives(directives = {}) {
   const result = {};
@@ -18,15 +18,8 @@ const elementMap = {
 }
 
 function parseAST(ast, props = {}) {
-  // const dataKeys = Object.keys(props.data || {});
-  // console.log('dataKeys =', dataKeys)
   let code = '';
-  if (ast.type === 'root') {
-    let children = ast.children.map((child) => {
-      return parseAST(child, props);
-    })
-    code = children.join(', ')
-  } else if (ast.type === 'element') {
+  if (ast.type === 'element') {
     if (ast.attributes?.class) {
       ast.attributes.className = ast.attributes?.class;
       delete ast.attributes.class;
@@ -34,14 +27,17 @@ function parseAST(ast, props = {}) {
     // console.log(parseDirectives(ast.directives));
     const directs = parseDirectives(ast.directives);
     let ifDirect = '';
-    if (directs['xx:if']) {
-      ifDirect = `(${directs['xx:if']}) && `
+    if (directs['@:if']) {
+      ifDirect = `(${directs['@:if']}) && `
     } 
 
-    function createCode() {
+    function createCode(extendProps = {}) {
+      const resultProps = {...(ast.attributes || {}), ...extendProps}
+      let propsStr = JSON.stringify(resultProps);
+      propsStr = propsStr.replace(/("{{|}}")/g, '');
       return `${ifDirect}React.createElement(
-        ${elementMap[ast.tag] || `"${ast.tag}"`},
-        ${JSON.stringify(ast.attributes || {})},
+        ${elementMap[ast.name] || `"${ast.name}"`},
+        ${propsStr},
         ${ast.children?.map((child) => {
           return parseAST(child, props)
         }).join(', ')}
@@ -49,13 +45,13 @@ function parseAST(ast, props = {}) {
     }
 
     code = createCode()
-    if (directs['xx:for']) {
-      code = `${directs['xx:for']}.map((item, idx) => {
-        return ${createCode({})};
+    if (directs['@:for']) {
+      code = `${directs['@:for']}.map((item, idx) => {
+        return ${createCode({key: '{{idx}}'})};
       })`
     }
   } else if (ast.type === 'text') {
-    code = `"${parseText(ast.text || '')}"`;
+    code = `"${parseText(ast.content || '')}"`;
   }
   return code;
 }
@@ -79,13 +75,11 @@ function getStateCode(props) {
 export function parseComponent(comp) {
   const { html, js, css } = comp;
   const page = getPageObject(js);
+
   const props = page.data;
-  console.log('props ==', props);
+  const ast = parse(html);
 
-  const ast = html2ast(html);
-  console.log('ast =', ast);
-
-  let result = parseAST(ast, props);
+  let result = parseAST(ast[0], props);
   result = `${getStateCode(props)} return ${result}`;
 
   const Component = new Function('props', result);
