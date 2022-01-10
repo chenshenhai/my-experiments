@@ -8,7 +8,7 @@ const whitespaceRE = /^\s*$/
 function setAttr(elem, key, val) {
   if (key.startsWith('@:')) {
     elem.directives[key] = val;
-  } else if (['bindtap'].includes(key)) {
+  } else if (['onClick'].includes(key)) {
     elem.events[key] = val;
   } else {
     elem.attributes[key] = val;

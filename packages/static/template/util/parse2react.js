@@ -24,7 +24,6 @@ function parseAST(ast, props = {}) {
       ast.attributes.className = ast.attributes?.class;
       delete ast.attributes.class;
     }
-    // console.log(parseDirectives(ast.directives));
     const directs = parseDirectives(ast.directives);
     let ifDirect = '';
     if (directs['@:if']) {
@@ -32,7 +31,16 @@ function parseAST(ast, props = {}) {
     } 
 
     function createCode(extendProps = {}) {
-      const resultProps = {...(ast.attributes || {}), ...extendProps}
+      const eventProps = {};
+      Object.keys(ast.events).forEach((name) => {
+        eventProps[name] = `{{this.${ast.events[name]}}}`
+      });
+
+      const resultProps = {
+        ...(ast.attributes || {}),
+        ...eventProps,
+        ...extendProps
+      }
       let propsStr = JSON.stringify(resultProps);
       propsStr = propsStr.replace(/("{{|}}")/g, '');
       return `${ifDirect}React.createElement(
@@ -56,7 +64,7 @@ function parseAST(ast, props = {}) {
   return code;
 }
 
-function getPageObject(js) {
+function getPageOptions(js) {
   const func = new Function(`
     const Page = (a) => a;
     return ${js};
@@ -64,28 +72,52 @@ function getPageObject(js) {
   return func();
 }
 
-function getStateCode(props) {
-  const propNames = Object.keys(props);
-  let code = `
-  const { ${propNames.join(',')} } = props;\r\n
-  `;
-  return code;
-}
 
-export function parseComponent(comp) {
+export function parseToReact(comp) {
   const { html, js, css } = comp;
-  const page = getPageObject(js);
+  const opts = getPageOptions(js);
 
-  const props = page.data;
+  const props = opts.data;
   const ast = parse(html);
 
-  let result = parseAST(ast[0], props);
-  result = `${getStateCode(props)} return ${result}`;
+  let dom = parseAST(ast[0], props);
+  const code = `
+  function Page(opts) {
+    return opts;
+  }
 
-  const Component = new Function('props', result);
+  const opts = ${js};
+
+  class App extends React.Component {
+    constructor() {
+      super();
+      this.state = opts.data;
+      Object.keys(opts).forEach((name) => {
+        if (typeof opts[name] === 'function') {
+          this[name] = opts[name].bind(this);
+        }
+      });
+    }
+  
+    get data() {
+      return this.state;
+    }
+  
+    setData(data) {
+      this.setState(data);
+    }
+  
+    render() {
+      const { ${Object.keys(opts.data).join(',')} } = this.state;
+      return ${dom}
+    }
+  }
+  return App;
+  `;
+
+  const genComponent = new Function('props', `${code}`);
   return {
-    props,
-    Component,
+    genComponent,
   }
 }
 
