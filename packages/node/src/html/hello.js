@@ -1,4 +1,4 @@
-Page({
+export default {
   
   data: {
     title: '这是一个测试组件',
@@ -19,4 +19,4 @@ Page({
   myClickAction: function() {
     this.setData({ count: this.data.count + 1 })
   }
-})
+}

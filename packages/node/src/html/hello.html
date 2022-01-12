@@ -4,7 +4,7 @@
     <span>{{subTitle}}</span>
   </view>
   <view class="box-2">count: {{count}}</view>
-  <view class="box-3" @:for="{{list}}" > 
+  <view class="box-3" @:for="{{list}}" @:for-index="index" @:for-item="item"> 
     {{item}}
   </view>
 
