@@ -1,8 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "build": "node ./scripts/ast.js",
-    "to-estree": "node ./scripts/to-estree.js"
+    "build": "node ./scripts/build.js",
+    "estree": "node ./scripts/estree.js"
   },
   "devDependencies": {
     "@babel/generator": "^7.16.7",

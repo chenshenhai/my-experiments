@@ -1,6 +1,9 @@
 <view>
-  <view class="box-1">{{title}}</view>
-  <view class="box-2">{{subTitle}}</view>
+  <view class="box-1">
+    <span>{{title}}</span>
+    <span>{{subTitle}}</span>
+  </view>
+  <view class="box-2">count: {{count}}</view>
   <view class="box-3" @:for="{{list}}" > 
     {{item}}
   </view>
