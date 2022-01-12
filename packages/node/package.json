@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "build": "node ./scripts/build.js",
+    "build": "node ./scripts/ast.js",
     "to-estree": "node ./scripts/to-estree.js"
   },
   "devDependencies": {

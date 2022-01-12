@@ -12,12 +12,12 @@ function createProgram(body = []) {
   }
 }
 
-function createFunction(body = []) {
+function createFunction(name, body = []) {
   return {
     "type": "FunctionDeclaration",
     "id": {
       "type": "Identifier",
-      "name": "Module"
+      "name": name
     },
     "generator": false,
     "async": false,
@@ -300,13 +300,25 @@ function createObject(obj) {
   }
 }
 
+function createExportDefault(name) {
+  return {
+    "type": "ExportDefaultDeclaration",
+    "declaration": {
+      "type": "Identifier",
+      "name": name
+    }
+  }
+}
+
 function toReactAst(htmlAst, page) {
   const propKeys = Object.keys(page.data || {});
+  const name = 'App'
   const target = createProgram([
-    createFunction([
+    createFunction(name, [
       createConstVar(propKeys),
       createReturn(htmlAst),
     ]),
+    createExportDefault(name)
   ]);
   return target;
 }
