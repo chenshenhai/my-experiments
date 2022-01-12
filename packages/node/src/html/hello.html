@@ -8,8 +8,11 @@
   <view class="box-4" @:if="{{type == '1'}}" >
     001
   </view>
-  <view class="box-4" @:if="{{type == '2'}}" >
+  <view class="box-4" @:elif="{{type == '2'}}" >
     002
+  </view>
+  <view class="box-4" @:else >
+    003
   </view>
   <view onClick="myClickAction">Click Me</view>
 </view>

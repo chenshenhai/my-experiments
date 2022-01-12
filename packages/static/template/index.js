@@ -6,8 +6,8 @@ start();
 
 async function start() {
   // const data = await getComponent('box');
-  // const data = await getComponent('hello');
-  const data = await getComponent('count');
+  const data = await getComponent('hello');
+  // const data = await getComponent('count');
   startReact(data);
   startVue(data);
 }
