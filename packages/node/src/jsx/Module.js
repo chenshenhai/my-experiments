@@ -1,7 +1,7 @@
 function Module(props) {
   const {
     myname,
-    bindtap,
+    onClick,
     list = []
   } = props;
   return React.createElement(
@@ -23,7 +23,9 @@ function Module(props) {
         }, item);
       })),
       React.createElement("button", {
-        onClick: bindtap
+        onClick: onClick
       }, "Hello Btn")
   );
 }
+
+export default Module;

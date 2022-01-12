@@ -1,5 +1,5 @@
 function Module(props) {
-  const { myname, bindtap, list = [] } = props;
+  const { myname, onClick, list = [] } = props;
   return (
     <div className="class001">
       <div className="class002">
@@ -10,7 +10,7 @@ function Module(props) {
           return (<span key={i}>{item}</span>)
         })}
       </div>
-      <button onClick={bindtap}>Hello Btn</button>
+      <button onClick={onClick}>Hello Btn</button>
     </div>
   )
 }

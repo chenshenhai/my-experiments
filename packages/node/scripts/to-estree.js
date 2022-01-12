@@ -8,19 +8,23 @@
 
 import babelParser from '@babel/parser';
 import { readJSX, writeDistFile } from './file.js';
-import { clearBabelAst } from './babel.js';
+// import { clearBabelAst } from './babel.js';
 
-const jsx = readJSX('Module.js');
-let ast = babelParser.parse(jsx, {
+const js = readJSX('Module.js');
+
+
+let ast = babelParser.parse(js, {
+  sourceType: "module",
   plugins: [
-    "jsx",
+    // "jsx",
   ],
 });
 
-// clearBabelAst(ast)
+// // clearBabelAst(ast)
 
-writeDistFile('jsx/Module.json', JSON.stringify(ast, null, 2))
-console.log(ast)
+writeDistFile('estree/Module.json', JSON.stringify(ast, null, 2))
+// // console.log(ast)
+
 
 
 

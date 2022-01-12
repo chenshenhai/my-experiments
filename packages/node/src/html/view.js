@@ -4,7 +4,7 @@ export default {
     list: [
       '001', '002', '003', '004'
     ],
-    bindtap: () => {
+    onClick: () => {
       console.log('Hello World')
     },
   }
