@@ -78,8 +78,6 @@ function createStateVar(vars) {
 }
 
 function createReturn(htmlAst) {
-  // console.log('htmlAst =', htmlAst);
-  // const ast = 
   return {
     "type": "ReturnStatement",
     "argument": createElement(htmlAst[0])
@@ -125,8 +123,15 @@ function createStr(str) {
   }
 }
 
+function createIdentifier(str) {
+  return {
+    "type": "Identifier",
+    "name": str.replace(/({{|}})/g, ''),
+  }
+}
+
 function createListElement(htmlAst, listKey, indexKey, itemKey) {
-  htmlAst.attributes['key'] = indexKey;
+  htmlAst.attributes['key'] = `{{${indexKey}}}`;
   const result = {
     "type": "CallExpression",
     "callee": {
@@ -225,6 +230,14 @@ function createTextList(htmlAst) {
 }
 
 function createElement(htmlAst) {
+  const _events = {};
+  Object.keys(htmlAst.events).forEach((name) => {
+    _events[name] = `{{this.${htmlAst.events[name]}}}`
+  });
+  const obj = {
+    ...htmlAst.attributes,
+    ..._events,
+  }
   const result = {
     "type": "CallExpression",
     "callee": {
@@ -244,7 +257,7 @@ function createElement(htmlAst) {
         "type": "StringLiteral",
         "value": htmlAst.name
       },
-      createObject(htmlAst.attributes),
+      createObject(obj),
     ]
   }
   if (Array.isArray(htmlAst.children)) {
@@ -298,10 +311,7 @@ function createObject(obj) {
         },
         "computed": false,
         "shorthand": false,
-        "value": {
-          "type": "StringLiteral",
-          "value": obj[name]
-        }
+        "value": createValue(obj[name])
       }
     })
   }
@@ -380,7 +390,12 @@ function createSuper() {
 
 function createValue(val) {
   if (typeof val === 'string') {
-    return createStr(val)
+    const _val = val.trim();
+    if (_val.startsWith('{{') && _val.endsWith('}}')) {
+      return createIdentifier(val)
+    } else {
+      return createStr(val) 
+    }
   } else {
     return createNull();
   }
@@ -423,6 +438,57 @@ function createDefineState(data) {
   }
 }
 
+function createClassMethodSetData() {
+  return  {
+    "type": "ClassMethod",
+    "static": false,
+    "key": {
+      "type": "Identifier",
+      "name": "setData"
+    },
+    "computed": false,
+    "kind": "method",
+    "id": null,
+    "generator": false,
+    "async": false,
+    "params": [
+      {
+        "type": "Identifier",
+        "name": "data"
+      }
+    ],
+    "body": {
+      "type": "BlockStatement",
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "ThisExpression"
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "name": "setState"
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "data"
+              }
+            ]
+          }
+        }
+      ],
+      "directives": []
+    }
+  }
+}
+
 function toReactAst(htmlAst, page) {
   const propKeys = Object.keys(page.data || {});
   const name = 'App'
@@ -432,6 +498,7 @@ function toReactAst(htmlAst, page) {
         createSuper(),
         createDefineState(page.data)
       ]),
+      createClassMethodSetData(),
       createClassMethod('method', 'render', [
         createStateVar(propKeys),
         createReturn(htmlAst),

@@ -4,7 +4,10 @@ class App extends React.Component {
   }
 
   render() {
-    return React.createElement('div', null, null)
+    const kkk = 1
+    return React.createElement('div', {
+      key: kkk
+    }, null)
   }
 }
 
