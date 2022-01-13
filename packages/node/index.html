@@ -4,14 +4,25 @@
   </head>
   <body>
     <h1>Example</h1>
-    <h2>React:</h2>
-    <div id="root-react"></div>
-    <h2>Vue:</h2>
-    <div id="root-vue"></div>
+    <div id="root"></div>
   </body>
   <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
   <script type="module">
-    import {  } from './dist/react/view.js';
+    async function main() {
+      const name = 'hello';
+      const App = (await import(`./dist/react/${name}.js`)).default
+      ReactDOM.render(
+        React.createElement(App, {
+          title: 'title---',
+          subTitle: 'subTitle-----',
+          list: ['001', '002', '003'],
+          type: '4',
+          count: 1
+        }, null),
+        document.querySelector('#root')
+      )
+    }
+    main();
   </script>
 </html>
