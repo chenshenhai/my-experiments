@@ -1,0 +1,12 @@
+<div class="class000">
+  <div class="class001">
+    <span @:if="{{myname}}">My name is {{myname}}</span>
+    <span @:else>No Name</span>
+  </div>
+  <div class="class002">
+    <span @:for="{{list}}" @:for-index="i" @:for-item="item">
+      {{item}}
+    </span>
+  </div>
+  <button onClick="{{onClick}}">Click Btn</button>
+</div>

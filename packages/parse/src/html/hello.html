@@ -1,0 +1,21 @@
+<view>
+  <view class="box-1">
+    <span>{{title}}</span>
+    <span>{{subTitle}}</span>
+  </view>
+  <view class="box-2">count: {{count}}</view>
+  <view class="box-3" @:for="{{list}}" @:for-index="index" @:for-item="item"> 
+    {{item}}
+  </view>
+
+  <view class="box-4" @:if="{{type == '1'}}" >
+    001
+  </view>
+  <view class="box-4" @:elif="{{type == '2'}}" >
+    002
+  </view>
+  <view class="box-4" @:else >
+    003
+  </view>
+  <view onClick="myClickAction">Click Me</view>
+</view>

@@ -1,0 +1,11 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "node ./scripts/build.js",
+    "estree": "node ./scripts/estree.js"
+  },
+  "devDependencies": {
+    "@babel/generator": "^7.16.7",
+    "@babel/parser": "^7.16.7"
+  }
+}
