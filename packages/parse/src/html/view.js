@@ -1,4 +1,6 @@
-export default { 
+console.log('xxxx')
+
+ModuleConfig({ 
   data: {
     myname: 'Apple',
     list: [
@@ -8,4 +10,4 @@ export default {
       console.log('Hello World')
     },
   }
-}
+})

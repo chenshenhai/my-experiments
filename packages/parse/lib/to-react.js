@@ -1,3 +1,7 @@
+import { parse } from './html2ast.js';
+import { parseJsAst, parseMainMethodsJsAst } from './js2ast.js';
+import babelParser from '@babel/parser'; 
+
 function createProgram(body = []) {
   return {
     "type": "File",
@@ -120,6 +124,13 @@ function createStr(str) {
   return {
     "type": "StringLiteral",
     "value": str
+  }
+}
+
+function createNum(val) {
+  return {
+    "type": "NumericLiteral",
+    "value": val
   }
 }
 
@@ -396,6 +407,8 @@ function createValue(val) {
     } else {
       return createStr(val) 
     }
+  } else if (typeof val === 'number') {
+    return createNum(val);
   } else {
     return createNull();
   }
@@ -489,20 +502,23 @@ function createClassMethodSetData() {
   }
 }
 
-function toReactAst(htmlAst, page) {
-  const propKeys = Object.keys(page.data || {});
+function toReactAst(html, js, data) {
+  const htmlAst = parse(html);
+  const jsAst = parseJsAst(js);
+  const stateKeys = Object.keys(data || {});
   const name = 'App'
   const target = createProgram([
     createComponentClass(name, [
       createClassMethod('constructor', 'constructor', [
         createSuper(),
-        createDefineState(page.data)
+        createDefineState(data)
       ]),
       createClassMethodSetData(),
       createClassMethod('method', 'render', [
-        createStateVar(propKeys),
+        createStateVar(stateKeys),
         createReturn(htmlAst),
       ]),
+      ...parseMainMethodsJsAst(jsAst),
     ]),
     createExportDefault(name)
   ]);
