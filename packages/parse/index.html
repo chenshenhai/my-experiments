@@ -10,16 +10,11 @@
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
   <script type="module">
     async function main() {
-      const name = 'count';
+      const urlParams = new URLSearchParams(window.location.search)
+      const name = urlParams.get('tpl') || 'hello';
       const App = (await import(`./dist/react/${name}.js`)).default
       ReactDOM.render(
-        React.createElement(App, {
-          title: 'title---',
-          subTitle: 'subTitle-----',
-          list: ['001', '002', '003'],
-          type: '4',
-          count: 1
-        }, null),
+        React.createElement(App, {}, null),
         document.querySelector('#root')
       )
     }

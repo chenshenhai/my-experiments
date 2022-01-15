@@ -26,8 +26,8 @@ async function parseComponent(name) {
 }
 
 async function start() {
-  // await parseComponent('view')
-  // await parseComponent('hello')
+  await parseComponent('view')
+  await parseComponent('hello')
   await parseComponent('count')
 }
 

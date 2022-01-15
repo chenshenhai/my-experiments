@@ -422,8 +422,17 @@ function createValue(val) {
     }
   } else if (typeof val === 'number') {
     return createNum(val);
+  } else if (Array.isArray(val)) {
+    return createArray(val);
   } else {
     return createNull();
+  }
+}
+
+function createArray(val) {
+  return {
+    "type": "ArrayExpression",
+    "elements": val.map(createValue)
   }
 }
 
