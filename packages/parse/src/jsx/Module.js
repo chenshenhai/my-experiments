@@ -3,6 +3,10 @@ class App extends React.Component {
     super();
   }
 
+  get data() {
+    return this.state;
+  }
+
   render() {
     const kkk = 1
     return React.createElement('div', {

@@ -141,6 +141,14 @@ function createIdentifier(str) {
   }
 }
 
+function getELementName(name) {
+  const map = {
+    'view': 'div',
+    'text': 'span',
+  }
+  return map[name] || map['view']
+}
+
 function createListElement(htmlAst, listKey, indexKey, itemKey) {
   htmlAst.attributes['key'] = `{{${indexKey}}}`;
   const result = {
@@ -243,12 +251,17 @@ function createTextList(htmlAst) {
 function createElement(htmlAst) {
   const _events = {};
   Object.keys(htmlAst.events).forEach((name) => {
-    _events[name] = `{{this.${htmlAst.events[name]}}}`
+    _events[name] = `{{this.${htmlAst.events[name]}.bind(this)}}`
   });
   const obj = {
     ...htmlAst.attributes,
     ..._events,
   }
+  if (obj['class']) {
+    obj['className'] = obj['class'];
+    delete obj['class'];
+  }
+
   const result = {
     "type": "CallExpression",
     "callee": {
@@ -266,7 +279,7 @@ function createElement(htmlAst) {
     "arguments": [
       {
         "type": "StringLiteral",
-        "value": htmlAst.name
+        "value": getELementName(htmlAst.name)
       },
       createObject(obj),
     ]
@@ -373,7 +386,7 @@ function createClassMethod(type, name, body = []) {
       "name": name
     },
     "computed": false,
-    "kind": type, // "method" | "constructor",
+    "kind": type, // "method" | "constructor" | "get",
     "id": null,
     "generator": false,
     "async": false,
@@ -502,6 +515,43 @@ function createClassMethodSetData() {
   }
 }
 
+function createClassMethodGetData() {
+  return {
+    "type": "ClassMethod",
+    "static": false,
+    "key": {
+      "type": "Identifier",
+      "name": "data"
+    },
+    "computed": false,
+    "kind": "get",
+    "id": null,
+    "generator": false,
+    "async": false,
+    "params": [],
+    "body": {
+      "type": "BlockStatement",
+      "body": [
+        {
+          "type": "ReturnStatement",
+          "argument": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "ThisExpression"
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "name": "state"
+            }
+          }
+        }
+      ],
+      "directives": []
+    }
+  };
+}
+
 function toReactAst(html, js, data) {
   const htmlAst = parse(html);
   const jsAst = parseJsAst(js);
@@ -513,6 +563,7 @@ function toReactAst(html, js, data) {
         createSuper(),
         createDefineState(data)
       ]),
+      createClassMethodGetData(),
       createClassMethodSetData(),
       createClassMethod('method', 'render', [
         createStateVar(stateKeys),
