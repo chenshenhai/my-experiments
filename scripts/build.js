@@ -1,12 +1,36 @@
 const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
-// const babel = require('@babel/core');
+const babel = require('@babel/core');
 const glob = require("glob");
 
 build();
 
 function build() {
+  buildTS();
+  tranformES();
+}
+
+function tranformES() {
+  const pattern = '**/*.js';
+  const cwd = resolve('dist');
+  const files = glob.sync(pattern, { cwd, });
+  files.forEach((file) => {
+    const filePath = resolve('dist', file);
+    const code = fs.readFileSync(filePath, { encoding: 'utf8' });
+    const result = babel.transformSync(code, {
+      filename: 'file.ts',
+      presets: [
+        // '@babel/preset-env', 
+        // '@babel/preset-typescript',
+      ],
+      plugins: []
+    })
+    fs.writeFileSync(filePath, result.code);
+  })
+}
+
+function buildTS() {
   const pattern = '**/*.ts';
   const cwd = resolve('src');
   const files = glob.sync(pattern, { cwd, });
