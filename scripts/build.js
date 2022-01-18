@@ -19,12 +19,39 @@ function tranformES() {
     const filePath = resolve('dist', file);
     const code = fs.readFileSync(filePath, { encoding: 'utf8' });
     const result = babel.transformSync(code, {
-      filename: 'file.ts',
+      filename: filePath,
+      ast: false,
+      code: true,
+      babelrc: false,
       presets: [
-        // '@babel/preset-env', 
+        [
+          '@babel/preset-env', 
+          {
+            modules: false,
+            targets: false
+          }
+        ]
         // '@babel/preset-typescript',
       ],
-      plugins: []
+      plugins: [
+        '@babel/plugin-proposal-export-default-from',
+        '@babel/plugin-proposal-export-namespace-from',
+        '@babel/plugin-proposal-object-rest-spread',
+        [
+          '@babel/plugin-transform-runtime',
+          {
+            useESModules: true,
+            version: '^7.10.4',
+          },
+        ],
+        [
+          '@babel/plugin-proposal-decorators',
+          {
+            legacy: true,
+          },
+        ],
+        '@babel/plugin-proposal-class-properties'
+      ]
     })
     fs.writeFileSync(filePath, result.code);
   })
