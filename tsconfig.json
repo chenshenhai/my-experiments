@@ -16,8 +16,7 @@
     "jsx":"preserve"
   },
   "include": [
-    "src",
-    "example/main.tsx"
+    "src"
   ],
   "exclude": [
     "example"
