@@ -1,5 +1,6 @@
 const path = require('path');
 const { createServer, defineConfig } = require('vite');
+const reactRefresh = require('@vitejs/plugin-react-refresh');
 
 dev();
 
@@ -23,11 +24,13 @@ function getViteConfig() {
       port: 8080,
       host: '127.0.0.1',
     },
-    plugins: [],
+    plugins: [reactRefresh()],
     esbuild: {
       include: [
         /\.ts$/,
+        /\.tsx$/,
         /\.js$/,
+        /\.jsx$/,
       ],
       exclude: [
         /\.html$/

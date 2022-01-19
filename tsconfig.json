@@ -12,10 +12,12 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "removeComments": true,
-    "lib": ["ESNext", "dom"]
+    "lib": ["ESNext", "dom"],
+    "jsx":"preserve"
   },
   "include": [
-    "src"
+    "src",
+    "example/main.tsx"
   ],
   "exclude": [
     "example"

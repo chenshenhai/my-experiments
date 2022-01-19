@@ -30,7 +30,8 @@ function tranformES() {
             modules: false,
             targets: false
           }
-        ]
+        ],
+        '@babel/preset-react',
         // '@babel/preset-typescript',
       ],
       plugins: [
@@ -58,7 +59,7 @@ function tranformES() {
 }
 
 function buildTS() {
-  const pattern = '**/*.ts';
+  const pattern = '**/*.*';
   const cwd = resolve('src');
   const files = glob.sync(pattern, { cwd, });
 
