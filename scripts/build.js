@@ -2,13 +2,16 @@ const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
 const babel = require('@babel/core');
-const glob = require("glob");
+const glob = require('glob');
+const less = require('less');
 
 build();
 
-function build() {
+async function build() {
+  remove('dist');
   buildTS();
   tranformES();
+  await buildLess();
 }
 
 function tranformES() {
@@ -59,12 +62,16 @@ function tranformES() {
 }
 
 function buildTS() {
-  const pattern = '**/*.*';
+  const pattern = '**/*.{ts,tsx}';
   const cwd = resolve('src');
   const files = glob.sync(pattern, { cwd, });
 
-  const targetFiles = files.map((file) => {
-    return resolve('src', file);
+  const targetFiles = [];
+
+  files.forEach((file) => {
+    if (!(file.startsWith('css/') || ['demo.tsx'].includes(file))) {
+      targetFiles.push(resolve('src', file))
+    }
   });
 
   // build ts -> esm
@@ -96,8 +103,53 @@ function buildTS() {
   // console.log('files ===', files);
 }
 
+async function buildLess() {
+  const lessPath = resolve('src', 'css', 'index.less');
+  const lessInput = fs.readFileSync(lessPath, { encoding: 'utf8' })
+  const { css } = await less.render(lessInput, {
+    filename: lessPath,
+  });
+  write(resolve('dist', 'css', 'index.css'), css);
+
+  const pattern = '**/*.less';
+  const cwd = resolve('src', 'css');
+  const files = glob.sync(pattern, { cwd, });
+  files.forEach((file) => {
+    const css = fs.readFileSync(resolve('src', 'css', file), { encoding: 'utf8' });
+    write(resolve('dist', 'css', file), css);
+  });
+}
+
 function resolve(...args) {
   return path.join(__dirname, '..', ...args);
+}
+
+function write(filePath, content) {
+  const fileDir = path.dirname(filePath);
+  if (!(fs.existsSync(fileDir) && fs.statSync(fileDir).isDirectory())) {
+    fs.mkdirSync(fileDir);
+  }
+  fs.writeFileSync(filePath, content);
+}
+
+function remove(dirPath) {
+  let files = [];
+  if (fs.existsSync(dirPath)) {
+    files = fs.readdirSync(dirPath);
+    files.forEach((filename) => {
+      let curPath = path.join(dirPath, filename);
+      const stat = fs.statSync(curPath);
+      if(stat.isDirectory()) {
+        remove(curPath);
+      } else if (stat.isFile()) {
+        // fs.unlinkSync(curPath);
+        fs.rmSync(curPath);
+      } else {
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(dirPath);
+  }
 }
 
 function getTsConfig() {
@@ -107,3 +159,5 @@ function getTsConfig() {
   const config = require(configPath)
   return config;
 }
+
+
