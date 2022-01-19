@@ -3,7 +3,7 @@ import Hello from './lib/mod';
 
 function App(props: any) {
   return (
-    <div>
+    <div className='app'>
       <Hello />
     </div>
   )
