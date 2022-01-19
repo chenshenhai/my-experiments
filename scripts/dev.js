@@ -10,9 +10,11 @@ async function dev() {
   await server.listen()
   server.printUrls();
   const { port, host = '127.0.0.1' } = server.config?.server || {}
+  const targetPage = `http://${host}:${port}/index.html`;
   console.log(
-    `Open: ` + `http://${host}:${port}/index.html`
+    `Open: ` + targetPage
   );
+  await open(targetPage);
 }
 
 function getViteConfig() {
