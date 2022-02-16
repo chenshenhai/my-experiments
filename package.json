@@ -1,5 +1,6 @@
 {
   "devDependencies": {
-    "heapdump": "^0.3.15"
+    "heapdump": "^0.3.15",
+    "v8-profiler-node8": "^6.3.0"
   }
 }
