@@ -11,6 +11,6 @@ app.listen(3002, () => {
 });
 
 process.on('message', (data) => {
-  console.log('[master get data]:', data);
+  console.log('system:', data);
 });
 
