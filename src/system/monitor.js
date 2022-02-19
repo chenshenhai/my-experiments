@@ -1,4 +1,5 @@
 const path = require('path');
+const process = require('process');
 const childProcess = require('child_process');
 
 function monitor() {
@@ -6,8 +7,8 @@ function monitor() {
   
   setInterval(() => {
     const mem = getMemoryInfo();
-    child.send({ mem });
-  }, 10 * 1000)
+    child.send({ pid: process.pid, mem });
+  }, 2 * 1000)
 }
 
 function getMemoryInfo() {
