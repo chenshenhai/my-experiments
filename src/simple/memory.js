@@ -9,8 +9,14 @@ function setCache() {
   const mem = process.memoryUsage().heapUsed / 1024 / 1024;
   console.log('mem(MB) =', mem)
   if (mem > 800) {
-    const snapshotDir = path.join(__dirname, '..', 'snapshot')
-    heapdump.writeSnapshot(path.join(snapshotDir, `memory-${Date.now()}.heapsnapshot`))
+    const snapshotDir = path.join(__dirname, '..', '..', 'snapshot')
+    heapdump.writeSnapshot(
+      path.join(snapshotDir, `memory-${Date.now()}.heapsnapshot`),
+      (err, filename) => {
+        console.log('Error: ', err);
+        console.log(filename)
+      }
+    )
     console.log('Stack Overlfow! ')
     process.exit(1);
   } else {

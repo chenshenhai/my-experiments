@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const profiler = require('v8-profiler-node8');
-const snapshotDir = path.join(__dirname, '..', 'snapshot')
+const snapshotDir = path.join(__dirname, '..', '..', 'snapshot')
 
 function delay(time) {
   return new Promise((resolve) => {
