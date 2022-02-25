@@ -1,3 +1,6 @@
 {
-  
+  "scripts": {
+    "server": "nodemon ./src/server.js",
+    "client": "node ./src/client.js" 
+  }
 }
