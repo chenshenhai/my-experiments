@@ -79,10 +79,10 @@ class Client {
   }
 
   connect() {
-    const { port, host } = this._opts;
     return new Promise((resolve, reject) => {
       try {
         this._connectAction((remote, connect) => {
+          console.log('remote =====', remote)
           this._remoteFuncMap = remote;
           this._netConn = connect;
           resolve();
@@ -122,6 +122,7 @@ class Client {
       }
 
       let messages = getMessageList(buffObj);
+      console.log('messages ===', messages)
       messages.forEach((msg) => {
         if(msg.name === ERROR_CMD){
           if(this._callbacks[msg.data.id]){
@@ -153,6 +154,7 @@ class Client {
   }
 
   async call(name, args) {
+    console.log('call:name ====', name)
     return await this._remoteFuncMap[name](...args);
   }
 

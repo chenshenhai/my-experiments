@@ -17,6 +17,7 @@ class Server {
   }
 
   register(name, func) {
+    this._description[name] = {};
     this._funcMap[name] = func;
   }
 
@@ -50,7 +51,10 @@ class Server {
 
         messages.forEach((msg) => {
 
+          console.log('msg ====', msg)
+
           if(msg.name === DESCRIPT_CMD){
+            this._descrStr = wrapperMessage(DESCRIPT_CMD, this._description);
             connect.write(this._descrStr);
           } else if(!this._funcMap[msg.name]){
             connect.write(wrapperMessage('error', {code: 'ERROR_UNKNOWN_MESSAGE'}));
