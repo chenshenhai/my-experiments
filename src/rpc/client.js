@@ -5,7 +5,8 @@ const {
   ERROR_CMD,
   getMessageList,
   wrapperMessage,
-  uuid
+  uuid,
+  BufferUtil
 } = require('./util');
 
 
@@ -34,18 +35,11 @@ function parseRemoteFunc(msgName, callbacks, connection){
         getLength: true,
         length: -1
       };
+      const bufUtil = new BufferUtil(buffObj);
 
       connection.on('data', function(data){
         try {
-          if(buffObj.bufferBytes && buffObj.bufferBytes.length > 0){
-            let tmpBuff = Buffer.from(buffObj.bufferBytes.length + data.length);
-
-            buffObj.bufferBytes.copy(tmpBuff, 0);
-            data.copy(tmpBuff, buffObj.bufferBytes.length);
-            buffObj.bufferBytes = tmpBuff;
-          } else {
-            buffObj.bufferBytes = data;
-          }
+          bufUtil.append(data)
 
           let messages = getMessageList(buffObj);
           messages.forEach(function(msg){

@@ -5,6 +5,7 @@ const {
   ERROR_CMD,
   getMessageList,
   wrapperMessage,
+  BufferUtil,
 } = require('./util');
 
 class Server {
@@ -35,17 +36,10 @@ class Server {
         getLength: true,
         length: -1
       };
+      const bufUtil = new BufferUtil(buffObj);
 
       connect.on('data', (data) => {
-        if(buffObj.bufferBytes && buffObj.bufferBytes.length > 0){
-          let tmpBuff = Buffer.from(buffObj.bufferBytes.length + data.length);
-          buffObj.bufferBytes.copy(tmpBuff, 0);
-          data.copy(tmpBuff, buffObj.bufferBytes.length);
-
-          buffObj.bufferBytes = tmpBuff;
-        } else {
-          buffObj.bufferBytes = data;
-        }
+        bufUtil.append(data);
 
         let messages = getMessageList(buffObj);
 
