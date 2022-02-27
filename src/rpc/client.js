@@ -51,8 +51,11 @@ function parseRemoteFunc(msgName, callbacks, connection){
           messages.forEach(function(msg){
             if(msg.name === RESULT_CMD && id === msg.data.id){
               resolve({
-                data: msg.data.args[0],
-                err: null,
+                result: msg.data.result,
+                id: msg.data.id,
+                funcName: msg.data.funcName,
+                args: msg.data.args,
+                error: null,
                 success: true,
               });
             } 
@@ -82,7 +85,6 @@ class Client {
     return new Promise((resolve, reject) => {
       try {
         this._connectAction((remote, connect) => {
-          console.log('remote =====', remote)
           this._remoteFuncMap = remote;
           this._netConn = connect;
           resolve();
@@ -122,7 +124,7 @@ class Client {
       }
 
       let messages = getMessageList(buffObj);
-      console.log('messages ===', messages)
+
       messages.forEach((msg) => {
         if(msg.name === ERROR_CMD){
           if(this._callbacks[msg.data.id]){
@@ -131,11 +133,16 @@ class Client {
           }
         } else if(msg.name === DESCRIPT_CMD){
           let remoteObj = {};
-
           for(let p in msg.data){
             remoteObj[p] = parseRemoteFunc(p, this._callbacks, connection);
           }
           callback(remoteObj, connection);
+        } else if (msg.name === RESULT_CMD) {
+          // let remoteObj = {};
+          // for(let p in msg.data){
+          //   remoteObj[p] = parseRemoteFunc(p, this._callbacks, connection);
+          // }
+          // callback(remoteObj, connection);
         }
       });
     });
@@ -154,7 +161,6 @@ class Client {
   }
 
   async call(name, args) {
-    console.log('call:name ====', name)
     return await this._remoteFuncMap[name](...args);
   }
 

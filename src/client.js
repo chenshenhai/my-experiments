@@ -10,8 +10,9 @@ async function main() {
   
   const result1 = await client.call('func1', [2, 3]);
   console.log('result1 ===', result1);
-  const result2 = await client.call('func2', [4, 5]);
-  console.log('result2 ===', result2);
+
+  // const result2 = await client.call('func2', [4, 5]);
+  // console.log('result2 ===', result2);
 
   client.close();
 }

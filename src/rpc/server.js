@@ -60,7 +60,13 @@ class Server {
             try{
               const args = msg.data.args; 
               const result = this._funcMap[msg.name](...args);
-              const resultMsg = wrapperMessage(RESULT_CMD, {id: msg.data.id, result: result, args: []});  
+              const resultMsg = wrapperMessage(
+                RESULT_CMD, {
+                  id: msg.data.id,
+                  result: result,
+                  funcName: msg.name,
+                  args: args
+                });  
               connect.write(resultMsg);
             } catch(err){
               const resultMessage = wrapperMessage(ERROR_CMD, {id: msg.data.id, err: err});
