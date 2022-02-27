@@ -41,8 +41,7 @@ class Server {
       connect.on('data', (data) => {
         bufUtil.append(data);
 
-        let messages = getMessageList(buffObj);
-
+        const messages = getMessageList(buffObj);
         messages.forEach((msg) => {
 
           if(msg.name === DESCRIPT_CMD){

@@ -37,12 +37,13 @@ function parseRemoteFunc(msgName, callbacks, connection){
       };
       const bufUtil = new BufferUtil(buffObj);
 
-      connection.on('data', function(data){
+      const dataEvent = function(data){
         try {
           bufUtil.append(data)
 
           let messages = getMessageList(buffObj);
           messages.forEach(function(msg){
+            connection.off('data', dataEvent)
             if(msg.name === RESULT_CMD && id === msg.data.id){
               resolve({
                 result: msg.data.result,
@@ -55,13 +56,16 @@ function parseRemoteFunc(msgName, callbacks, connection){
             } 
           });
         } catch ( err ) {
+          connection.off('data', dataEvent)
           resolve({
             data: null,
             err: err,
             success: false,
           });
         }
-      });
+      }
+
+      connection.on('data', dataEvent);
     });
     
   };
@@ -104,19 +108,10 @@ class Client {
       getLength: true,
       length: -1
     };
+    const bufUtil = new BufferUtil(buffObj);
 
     connection.on('data', function(data){
-      if(buffObj.bufferBytes && buffObj.bufferBytes.length > 0){
-        let tmpBuff = Buffer.from(buffObj.bufferBytes.length + data.length);
-
-        buffObj.bufferBytes.copy(tmpBuff, 0);
-        data.copy(tmpBuff, buffObj.bufferBytes.length);
-
-        buffObj.bufferBytes = tmpBuff;
-      } else {
-        buffObj.bufferBytes = data;
-      }
-
+      bufUtil.append(data);
       let messages = getMessageList(buffObj);
 
       messages.forEach((msg) => {
@@ -131,12 +126,6 @@ class Client {
             remoteObj[p] = parseRemoteFunc(p, this._callbacks, connection);
           }
           callback(remoteObj, connection);
-        } else if (msg.name === RESULT_CMD) {
-          // let remoteObj = {};
-          // for(let p in msg.data){
-          //   remoteObj[p] = parseRemoteFunc(p, this._callbacks, connection);
-          // }
-          // callback(remoteObj, connection);
         }
       });
     });

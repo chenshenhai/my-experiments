@@ -8,11 +8,17 @@ async function main() {
   });
   await client.connect();
   
-  const result1 = await client.call('func1', [2, 3]);
+  const result1 = await client.call('func1', [1, 2]);
   console.log('result1 ===', result1);
 
-  const result2 = await client.call('func2', [4, 5]);
+  const result2 = await client.call('func1', [2, 3]);
   console.log('result2 ===', result2);
+
+  const result3 = await client.call('func2', [4, 5]);
+  console.log('result3 ===', result3);
+
+  const result4 = await client.call('func2', [6, 7]);
+  console.log('result4 ===', result4);
 
   client.close();
 }
