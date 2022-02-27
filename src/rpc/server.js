@@ -51,29 +51,17 @@ class Server {
 
         messages.forEach((msg) => {
 
-          console.log('msg ====', msg)
-
           if(msg.name === DESCRIPT_CMD){
             this._descrStr = wrapperMessage(DESCRIPT_CMD, this._description);
             connect.write(this._descrStr);
           } else if(!this._funcMap[msg.name]){
             connect.write(wrapperMessage('error', {code: 'ERROR_UNKNOWN_MESSAGE'}));
           } else {
-            const args = msg.data.args; 
-
-            args.push(function() {
-              let innerArgs = [];   
-              for(let ai = 0, al = arguments.length; ai < al; ++ai){
-                if(typeof arguments[ai] !== 'function'){
-                  innerArgs.push(arguments[ai]);
-                }
-              } 
-              let resultMsg = wrapperMessage(RESULT_CMD, {id: msg.data.id, args: innerArgs});  
-              connect.write(resultMsg);
-            });
-
             try{
-              this._funcMap[msg.name].apply({}, args);
+              const args = msg.data.args; 
+              const result = this._funcMap[msg.name](...args);
+              const resultMsg = wrapperMessage(RESULT_CMD, {id: msg.data.id, result: result, args: []});  
+              connect.write(resultMsg);
             } catch(err){
               const resultMessage = wrapperMessage(ERROR_CMD, {id: msg.data.id, err: err});
               connect.write(resultMessage);
