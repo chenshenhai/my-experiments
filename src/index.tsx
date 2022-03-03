@@ -1,10 +1,10 @@
 import React from 'react';
-import Hello from './lib/mod';
+import Editor from './editor';
 
 function App(props: any) {
   return (
-    <div className='app'>
-      <Hello />
+    <div>
+      <Editor />
     </div>
   )
 }
