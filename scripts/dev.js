@@ -1,4 +1,5 @@
 const path = require('path');
+const open = require('open');
 const { createServer, defineConfig } = require('vite');
 const reactRefresh = require('@vitejs/plugin-react-refresh');
 

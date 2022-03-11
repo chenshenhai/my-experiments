@@ -1,1 +1,1 @@
-import '../src/demo.tsx'
+import '../src/index.tsx'

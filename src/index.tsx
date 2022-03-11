@@ -1,12 +1,18 @@
 import React from 'react';
-import Hello from './lib/mod';
+import { render } from 'react-dom'
+import { Container } from './lib/container';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
-function App(props: any) {
+function App() {
   return (
-    <div className='app'>
-      <Hello />
+    <div className="App">
+      <DndProvider backend={HTML5Backend}>
+        <Container />
+      </DndProvider>
     </div>
   )
 }
 
-export default App;
+const rootElement = document.getElementById('app')
+render(<App />, rootElement)
