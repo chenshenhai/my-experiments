@@ -1,6 +1,30 @@
 import React from 'react'
 import { Wrapper } from './wrapper'
 import { Box } from './box'
+import Module1 from './../components/mod1';
+import Module2 from '../components/mod2';
+import Module3 from '../components/mod2';
+
+const moduleData: any = {
+  list: [
+    {
+      entity: Module1,
+      name: 'Module 001',
+      id: 'module-1'
+    },
+    {
+      entity: Module2,
+      name: 'Module 002',
+      id: 'module-2'
+    },
+    {
+      entity: Module3,
+      name: 'Module 003',
+      id: 'module-3'
+    }
+  ]
+}
+
 
 export const Container: React.FC = () => {
   
@@ -12,9 +36,11 @@ export const Container: React.FC = () => {
   return (
     <div className='page'>
       <div className='page-module'>
-        <Box name="box-001" id="box-1" />
-        <Box name="box-002" id="box-2" />
-        <Box name="box-003" id="box-3"/>
+        {moduleData.list.map((item: any, i: number) => {
+          return (
+            <Box key={i} name={item.name} id={item.id} />
+          )
+        })}
       </div>
       <div className='page-module'>
         <div className='wrapper-list'>

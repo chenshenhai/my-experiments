@@ -4,7 +4,8 @@ import { ItemTypes } from './item-types'
 
 export interface BoxProps {
   id: string,
-  name: string
+  name: string,
+  children?: React.ReactNode
 }
 
 interface DropResult {
@@ -14,7 +15,8 @@ interface DropResult {
   wrapperName: string
 }
 
-export const Box: FC<BoxProps> = function Box({ name, id }) {
+export const Box: FC<BoxProps> = function Box(props: BoxProps) {
+  const { name, id, children } = props;
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.BOX,
     item: { name, id },
@@ -36,9 +38,8 @@ export const Box: FC<BoxProps> = function Box({ name, id }) {
       ref={drag}
       className='box'
       style={{  opacity }}
-      data-testid={`box-${name}`}
     >
-      {name}
+      {children || name}
     </div>
   )
 }
