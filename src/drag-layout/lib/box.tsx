@@ -8,9 +8,10 @@ export interface BoxProps {
   children?: React.ReactNode
 }
 
-interface DropResult {
+export interface DropResult {
   id: string,
   name: string,
+  wrapperIndex: number,
   wrapperId: string,
   wrapperName: string
 }
@@ -23,7 +24,7 @@ export const Box: FC<BoxProps> = function Box(props: BoxProps) {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>()
       if (item && dropResult) {
-        console.log(`You dropped [${item.name}] into [${dropResult.name}]!`)
+        // console.log(`You dropped [${item.name}] into [${dropResult.name}]!`)
       }
     },
     collect: (monitor) => ({

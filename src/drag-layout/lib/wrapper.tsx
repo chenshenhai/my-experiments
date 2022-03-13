@@ -1,12 +1,14 @@
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, createElement, Fragment } from 'react'
 import { useDrop } from 'react-dnd'
 import { ItemTypes } from './item-types'
+import { TypeCompList } from './data';
 
 export interface WrapperProps {
-  children?: ReactNode,
+  index: number,
   name: string,
   id: string,
-  onDrop: (item: any) => void
+  onDrop: (item: any) => void,
+  compList: TypeCompList,
 }
 
 export interface WrapperState {
@@ -17,13 +19,14 @@ export interface WrapperState {
 const greedy = false;
 
 export const Wrapper: FC<WrapperProps> = ({
+  index,
   id,
-  children,
-  name = 'Hello',
+  name,
   onDrop,
+  compList
 }) => {
-  const [hasDropped, setHasDropped] = useState(false)
-  const [hasDroppedOnChild, setHasDroppedOnChild] = useState(false)
+  // const [hasDropped, setHasDropped] = useState(false)
+  // const [hasDroppedOnChild, setHasDroppedOnChild] = useState(false)
 
   const [{ isOver, isOverCurrent }, drop] = useDrop(
     () => ({
@@ -33,12 +36,13 @@ export const Wrapper: FC<WrapperProps> = ({
         if (didDrop && !greedy) {
           return
         }
-        setHasDropped(true)
-        setHasDroppedOnChild(didDrop)
+        // setHasDropped(true)
+        // setHasDroppedOnChild(didDrop)
         
         onDrop({
           id: _item?.id || '',
           name: _item?.name || '',
+          wrapperIndex: index,
           wrapperId: id,
           wrapperName: name,
         });
@@ -49,7 +53,7 @@ export const Wrapper: FC<WrapperProps> = ({
         isOverCurrent: monitor.isOver({ shallow: true }),
       }),
     }),
-    [setHasDropped, setHasDroppedOnChild],
+    // [setHasDropped, setHasDroppedOnChild],
   )
 
   let backgroundColor = '#00000036';
@@ -58,10 +62,22 @@ export const Wrapper: FC<WrapperProps> = ({
     backgroundColor = '#f4433694'
   }
 
+  function renderCompList(list: TypeCompList): any {
+    return createElement(
+      Fragment,
+      {},
+      ...list.map((Mod: React.FC | React.Component, i: number) => {
+        // @ts-ignore
+        return createElement(Mod, { key: i }, [])
+      })
+    )
+  }
+
   return (
     <div ref={drop} className='wrapper' style={{backgroundColor}}>
-      {hasDropped && <div>dropped {hasDroppedOnChild && ' on child'}</div>}
-      <div>{children}</div>
+      {/* {hasDropped && <div>dropped {hasDroppedOnChild && ' on child'}</div>}
+      <div>{children}</div> */}
+      {renderCompList(compList)}
     </div>
   )
 }

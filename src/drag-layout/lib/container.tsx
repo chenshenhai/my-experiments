@@ -1,36 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Wrapper } from './wrapper'
-import { Box } from './box'
-import Module1 from './../components/mod1';
-import Module2 from '../components/mod2';
-import Module3 from '../components/mod2';
+import { Box, DropResult } from './box'
+import { moduleData, getModuleById, TypeCompList } from './data';
 
-const moduleData: any = {
-  list: [
-    {
-      entity: Module1,
-      name: 'Module 001',
-      id: 'module-1'
-    },
-    {
-      entity: Module2,
-      name: 'Module 002',
-      id: 'module-2'
-    },
-    {
-      entity: Module3,
-      name: 'Module 003',
-      id: 'module-3'
-    }
-  ]
+const wrapperCount = 3;
+const defaultCompLists: TypeCompList[] = [];
+for (let i = 0; i < wrapperCount; i++) {
+  defaultCompLists.push([]);
 }
-
 
 export const Container: React.FC = () => {
   
+  const [compLists, setCompLists] = useState<TypeCompList[]>(defaultCompLists);
 
-  const onDrop = (item: any) => {
-    console.log('item ===', item);
+  const onDrop = (result: DropResult) => {
+    const { id, wrapperIndex } = result;
+    const Module = getModuleById(id);
+
+    if (Module) {
+      compLists[wrapperIndex].push(Module);
+      setCompLists(compLists);
+    }
   }
 
   return (
@@ -44,11 +34,17 @@ export const Container: React.FC = () => {
       </div>
       <div className='page-module'>
         <div className='wrapper-list'>
-          <Wrapper name="001" id="wrapper-1" onDrop={onDrop}>
-            hello
-          </Wrapper>
-          <Wrapper name="002" id="wrapper-2" onDrop={onDrop}></Wrapper>
-          <Wrapper name="003" id="wrapper-3" onDrop={onDrop}></Wrapper>
+          {compLists.map((compList: TypeCompList, i: number) => {
+            return (
+              <Wrapper
+                key={i}
+                index={i}
+                name={`wrapper-name-${i}`}
+                id={`wrapper-${i}`}
+                onDrop={onDrop}
+                compList={compList} />
+            )
+          })}
         </div>
       </div>
     </div>
