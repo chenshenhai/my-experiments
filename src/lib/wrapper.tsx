@@ -18,17 +18,19 @@ function getStyle(backgroundColor: string): CSSProperties {
   }
 }
 
-export interface DustbinProps {
-  greedy?: boolean
-  children?: ReactNode
+export interface WrapperProps {
+  children?: ReactNode,
+  name: string,
 }
 
-export interface DustbinState {
+export interface WrapperState {
   hasDropped: boolean
   hasDroppedOnChild: boolean
 }
 
-export const Dustbin: FC<DustbinProps> = ({ greedy, children }) => {
+const greedy = false;
+
+export const Wrapper: FC<WrapperProps> = ({ children, name = 'Hello' }) => {
   const [hasDropped, setHasDropped] = useState(false)
   const [hasDroppedOnChild, setHasDroppedOnChild] = useState(false)
 
@@ -36,34 +38,31 @@ export const Dustbin: FC<DustbinProps> = ({ greedy, children }) => {
     () => ({
       accept: ItemTypes.BOX,
       drop(_item: unknown, monitor) {
-        const didDrop = monitor.didDrop()
+        const didDrop = monitor.didDrop();
         if (didDrop && !greedy) {
           return
         }
         setHasDropped(true)
         setHasDroppedOnChild(didDrop)
+        return { name: `Wrapper-${name}` }
       },
       collect: (monitor) => ({
         isOver: monitor.isOver(),
         isOverCurrent: monitor.isOver({ shallow: true }),
       }),
     }),
-    [greedy, setHasDropped, setHasDroppedOnChild],
+    [setHasDropped, setHasDroppedOnChild],
   )
 
-  const text = greedy ? 'greedy' : 'not greedy'
   let backgroundColor = 'rgba(0, 0, 0, .5)'
 
-  if (isOverCurrent || (isOver && greedy)) {
+  if (isOverCurrent || isOver) {
     backgroundColor = 'darkgreen'
   }
 
   return (
     <div ref={drop} style={getStyle(backgroundColor)}>
-      {text}
-      <br />
-      {hasDropped && <span>dropped {hasDroppedOnChild && ' on child'}</span>}
-
+      {hasDropped && <div>dropped {hasDroppedOnChild && ' on child'}</div>}
       <div>{children}</div>
     </div>
   )
