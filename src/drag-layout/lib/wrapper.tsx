@@ -5,6 +5,8 @@ import { ItemTypes } from './item-types'
 export interface WrapperProps {
   children?: ReactNode,
   name: string,
+  id: string,
+  onDrop: (item: any) => void
 }
 
 export interface WrapperState {
@@ -14,20 +16,32 @@ export interface WrapperState {
 
 const greedy = false;
 
-export const Wrapper: FC<WrapperProps> = ({ children, name = 'Hello' }) => {
+export const Wrapper: FC<WrapperProps> = ({
+  id,
+  children,
+  name = 'Hello',
+  onDrop,
+}) => {
   const [hasDropped, setHasDropped] = useState(false)
   const [hasDroppedOnChild, setHasDroppedOnChild] = useState(false)
 
   const [{ isOver, isOverCurrent }, drop] = useDrop(
     () => ({
       accept: ItemTypes.BOX,
-      drop(_item: unknown, monitor) {
+      drop(_item: any, monitor) {
         const didDrop = monitor.didDrop();
         if (didDrop && !greedy) {
           return
         }
         setHasDropped(true)
         setHasDroppedOnChild(didDrop)
+        
+        onDrop({
+          id: _item?.id || '',
+          name: _item?.name || '',
+          wrapperId: id,
+          wrapperName: name,
+        });
         return { name: `Wrapper-${name}` }
       },
       collect: (monitor) => ({

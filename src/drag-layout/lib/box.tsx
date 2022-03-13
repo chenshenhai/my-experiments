@@ -1,19 +1,23 @@
-import React, { CSSProperties, FC } from 'react'
+import React, { FC } from 'react'
 import { useDrag } from 'react-dnd'
 import { ItemTypes } from './item-types'
 
 export interface BoxProps {
+  id: string,
   name: string
 }
 
 interface DropResult {
-  name: string
+  id: string,
+  name: string,
+  wrapperId: string,
+  wrapperName: string
 }
 
-export const Box: FC<BoxProps> = function Box({ name }) {
+export const Box: FC<BoxProps> = function Box({ name, id }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.BOX,
-    item: { name },
+    item: { name, id },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>()
       if (item && dropResult) {
