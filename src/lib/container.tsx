@@ -9,11 +9,9 @@ export const Container: React.FC = () => (
       <Box name="hello" />
     </div>
     <div className='page-module'>
-      <Wrapper name="001">
-        <Wrapper  name="002">
-          <Wrapper name="003"/>
-        </Wrapper>
-      </Wrapper>
+      <Wrapper name="001" />
+      <Wrapper name="002" />
+      <Wrapper name="003"/>
     </div>
   </div>
 )

@@ -1,22 +1,6 @@
-import React, { CSSProperties, FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import { ItemTypes } from './item-types'
-
-function getStyle(backgroundColor: string): CSSProperties {
-  return {
-    border: '1px solid rgba(0,0,0,0.2)',
-    minHeight: '8rem',
-    minWidth: '8rem',
-    color: 'white',
-    backgroundColor,
-    padding: '2rem',
-    paddingTop: '1rem',
-    margin: '1rem',
-    textAlign: 'center',
-    float: 'left',
-    fontSize: '1rem',
-  }
-}
 
 export interface WrapperProps {
   children?: ReactNode,
@@ -54,14 +38,14 @@ export const Wrapper: FC<WrapperProps> = ({ children, name = 'Hello' }) => {
     [setHasDropped, setHasDroppedOnChild],
   )
 
-  let backgroundColor = 'rgba(0, 0, 0, .5)'
+  let backgroundColor = '#00000036';
 
   if (isOverCurrent || isOver) {
-    backgroundColor = 'darkgreen'
+    backgroundColor = '#f4433694'
   }
 
   return (
-    <div ref={drop} style={getStyle(backgroundColor)}>
+    <div ref={drop} className='wrapper' style={{backgroundColor}}>
       {hasDropped && <div>dropped {hasDroppedOnChild && ' on child'}</div>}
       <div>{children}</div>
     </div>
