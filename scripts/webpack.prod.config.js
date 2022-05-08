@@ -1,64 +1,108 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { VueLoaderPlugin } = require('vue-loader/dist/index')
-const ENV = process.env.NODE_ENV === 'development' ? 'development' : 'production';
+// const ENV = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 const fileResolve = function (file) {
   return path.join(__dirname, '..', file);
 };
 
+const babelConfig = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: {
+          browsers: [
+            'last 2 versions',
+            'Firefox ESR',
+            '> 1%',
+            'ie >= 11',
+            'iOS >= 8',
+            'Android >= 4',
+          ],
+        },
+      },
+    ],
+    '@babel/preset-typescript',
+  ],
+  plugins: [
+    ['@vue/babel-plugin-jsx', { mergeProps: false, enableObjectSlots: false }],
+  ],
+};
+
 module.exports = {
-  mode: ENV, 
-  devtool: 'inline-cheap-module-source-map',  
+  mode: 'production',
   entry: {
-    'index' : fileResolve('src/index.js'),
+    'index' : fileResolve('src/index.ts'),
   },
- 
   output: {
     path: fileResolve(''),
     filename: 'dist/[name].js',
   },
-
   module: {
     rules: [
       {
+        test: /\.(vue)$/,
+        loader: 'vue-loader',
+      },
+      {
+        test: /\.(ts|tsx)?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: babelConfig,
+          },
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              appendTsSuffixTo: ['\\.vue$'],
+              happyPackMode: false,
+            },
+          },
+        ],
+        exclude: /node_modules/,
+      },
+      {
         test: /\.(js|jsx)$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-            ],
-            'plugins': []
-          }
-        }
+        loader: 'babel-loader',
+        exclude: /pickr.*js/,
+        options: babelConfig,
       },
+      // {
+      //   test: /\.(png|jpg|gif|svg)$/,
+      //   loader: 'file-loader',
+      //   options: {
+      //     name: '[name].[ext]?[hash]',
+      //   },
+      // },
       {
-        test: /\.vue$/,
+        test: /\.less$/,
         use: [
-          'vue-loader'
-        ]
-      },
-      {
-        test: /\.(css|less)$/,
-        use: [
-          // MiniCssExtractPlugin.loader,
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           'css-loader',
-          "less-loader",
-        ]
+          'less-loader',
+        ],
       },
-    ]
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+        ],
+      },
+    ],
   },
-  
   resolve: {
-    extensions: ['.jsx', '.js', '.vue' ],
+    alias: {},
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.md'],
   },
-
   plugins: [
-    new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'dist/[name].css'
-    })
+      filename: 'dist/[name].css',
+    }),
+    new VueLoaderPlugin(),
+    // new WebpackBar(),
   ],
-}
+};
