@@ -1,9 +1,9 @@
 <template>
-  <Box />
+  <Counter />
 </template>
 
 <script setup>
-import Box from './box.vue';
+import Counter from './counter.vue';
 </script>
 
 

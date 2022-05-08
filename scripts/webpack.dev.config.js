@@ -11,7 +11,7 @@ module.exports = {
   mode: ENV, 
   devtool: 'inline-cheap-module-source-map',  
   entry: {
-    'index' : fileResolve('src/index.js'),
+    'index' : fileResolve('src/index.ts'),
   },
  
   output: {
@@ -32,6 +32,14 @@ module.exports = {
             'plugins': []
           }
         }
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
+        exclude: /node_modules/,
       },
       {
         test: /\.vue$/,
