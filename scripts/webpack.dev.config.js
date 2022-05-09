@@ -70,9 +70,12 @@ module.exports = {
   ],
 
   devServer: {
-    contentBase: path.join(__dirname, '..'),
+    static: {
+      directory: path.join(__dirname, '..', 'example'),
+    },
+    compress: true,
     port: 9000,
     hot: false,
-    inline: false,
+    compress: false,
   }
 }
