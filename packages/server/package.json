@@ -1,0 +1,10 @@
+{
+  "name": "@my/server",
+  "version": "0.0.0",
+  "dependencies": {
+    "koa": "^2.13.4"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.13.4"
+  }
+}

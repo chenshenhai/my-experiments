@@ -1,0 +1,27 @@
+{
+  "extends": "@tsconfig/node18/tsconfig.json",
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": ["ES6", "DOM"],
+    "importHelpers": true,
+    "allowJs": true
+  },
+  "include": [
+    "packages/**/src/**/*.ts",
+    "packages/**src/**/*.d.ts",
+    "packages/**src/**/*.tsx",
+    "packages/**src/**/*.vue",
+    "scripts/**/*.ts"
+  ],
+  "ts-node": {
+    "esm": true,
+    "files": true
+  }
+}
