@@ -1,5 +1,5 @@
 import Koa from 'koa';
-import { render } from './render';
+import { render } from './api';
 const app = new Koa();
 const port = 3001;
 
